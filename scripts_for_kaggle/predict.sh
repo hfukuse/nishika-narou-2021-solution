@@ -24,3 +24,5 @@ python ./nishika-narou-2021-1st-place-solution/scripts_for_kaggle/n102_nishika_n
 python ./nishika-narou-2021-1st-place-solution/scripts_for_kaggle/n107_nishika_narou_use_rmse_for_inference.py
 #i117_inferenceを作成
 python ./nishika-narou-2021-1st-place-solution/scripts_for_kaggle/n117_nishika_narou_change_multirmse_for_inference.py
+
+python ./nishika-narou-2021-1st-place-solution/scripts_for_kaggle/predict.py
