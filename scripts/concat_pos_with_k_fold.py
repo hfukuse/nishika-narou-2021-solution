@@ -15,7 +15,7 @@ from xfeat import Pipeline, SelectCategorical, LabelEncoder
 def make_parse():
     parser = argparse.ArgumentParser()
     arg = parser.add_argument
-    arg("--settings", default="./settings_for_kaggle.json", type=str, help="settings path")
+    arg("--settings", default="./settings.json", type=str, help="settings path")
     return parser
 
 args = make_parse().parse_args()

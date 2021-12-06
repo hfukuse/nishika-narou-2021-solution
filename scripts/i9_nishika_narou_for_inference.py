@@ -29,7 +29,6 @@ from utils.preprocess import remove_url
 from utils.model import NarouModel
 from utils.dataset import NishikaNarouDataset
 
-
 r_ = Fore.RED
 b_ = Fore.BLUE
 g_ = Fore.GREEN
@@ -43,9 +42,10 @@ def make_parse():
     parser = argparse.ArgumentParser()
     arg = parser.add_argument
     arg("--debug", action="store_true", help="debug")
-    arg("--settings", default="./settings_for_kaggle.json", type=str, help="settings path")
+    arg("--settings", default="./settings.json", type=str, help="settings path")
     arg("--is_test", action="store_true", help="test")
     return parser
+
 
 args = make_parse().parse_args()
 
@@ -61,14 +61,15 @@ class Config:
     train_dir = js["train_dir"]
     item = js["item"]
     dataset_dir = js["dataset_dir"]
-    item_num = js["i8"]["item_num"] # 0ならstory(あらすじ),1ならtitle(題名),2ならkeyword(タグ)
-    output_dir = js["i8"]["output_dir"]
-    max_len = js["i8"]["max_len"]
-    model_dir = js["models_dir"]+"/"+js["i8"]["model_dir"]
+    item_num = js["i9"]["item_num"] # 0ならstory(あらすじ),1ならtitle(題名),2ならkeyword(タグ)
+    output_dir = js["i9"]["output_dir"]
+    max_len = js["i9"]["max_len"]
+    model_dir = js["models_dir"]+"/"+js["i9"]["model_dir"]
 
 
 os.system('pip install transformers fugashi ipadic unidic_lite --quiet')
 os.system('mkdir -p ' + Config.output_dir)
+
 
 test_df = pd.read_csv(Config.dataset_dir + '/test.csv')
 test_df.head()
@@ -100,6 +101,7 @@ for model_num in range(n_models):
     test_ds = NishikaNarouDataset(data=test_df, tokenizer=tokenizer, is_test=True)
     test_sampler = SequentialSampler(test_ds)
     test_dataloader = DataLoader(test_ds, sampler=test_sampler, batch_size=Config.batch_size)
+
     model = NarouModel(transformer, config)
     model.load_state_dict(torch.load(Config.model_dir + f'/best_model_{model_num}.pt'))
     model = model.to(Config.device)
@@ -184,6 +186,7 @@ for model_num in range(n_models):
     all_preds = np.array(all_preds)
     score.append(loss_fn(y_true, all_preds))
 
+
     val_pre_df = pd.concat(
         [test_df[test_df['fold'] == model_num].ncode.reset_index(drop=True), pd.DataFrame(all_preds)], axis=1)
 
@@ -213,6 +216,7 @@ score = []
 models_preds = []
 all_val_pre_df = pd.DataFrame()
 for model_num in range(n_models):
+    print(f'Inference#{model_num + 1}/{n_models}')
     test_ds = NishikaNarouDataset(data=test_df, tokenizer=tokenizer, is_test=True)
     test_sampler = SequentialSampler(test_ds)
     test_dataloader = DataLoader(test_ds, sampler=test_sampler, batch_size=Config.batch_size)

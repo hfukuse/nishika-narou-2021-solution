@@ -6,7 +6,6 @@ import pandas as pd
 from scipy.stats import logistic
 from scipy.special import softmax
 import re
-import sklearn.preprocessing as sp
 import json
 
 from utils.preprocess import remove_url,processing_ncode,count_keyword,count_nn_story,count_n_story
@@ -15,7 +14,7 @@ def make_parse():
     parser = argparse.ArgumentParser()
     arg = parser.add_argument
     arg("--debug", action="store_true", help="debug")
-    arg("--settings", default="./settings_for_kaggle.json", type=str, help="settings path")
+    arg("--settings", default="./settings.json", type=str, help="settings path")
     arg("--is_test", action="store_true", help="test")
     return parser
 
@@ -34,8 +33,8 @@ class Config:
     item = js["item"]
     dataset_dir = js["dataset_dir"]
     pos_dir = js["pos_dir"]
-    output_dir = js["n117"]["output_dir"]
-    model_dir = js["models_dir"]+"/"+js["n117"]["model_dir"]
+    output_dir = js["n102"]["output_dir"]
+    model_dir = js["models_dir"]+"/"+js["n102"]["model_dir"]
 
 
 os.system('pip install transformers fugashi ipadic unidic_lite --quiet')
@@ -64,7 +63,7 @@ raw_df = raw_df.drop_duplicates().reset_index(drop=True)
 
 def create_tag_feature(df):
     arr = []
-    key_w = ["ざまあ"]
+    key_w = ["ざまあ", "ざまぁ", "追放", "TS", "女主人公", "チート", "婚約破棄", "令嬢", "ハーレム"]
     for i, item in df.iterrows():
         for k in key_w:
             if k in str(item.keyword):
@@ -76,6 +75,55 @@ def create_tag_feature(df):
 
 
 tags_df, key_w = create_tag_feature(raw_df)
+
+
+def create_shosekika_feature(df):
+    arr = []
+    key_w = ["書籍化", "日間", "年間", "コミカライズ"]
+    for i, item in df.iterrows():
+        for k in key_w:
+            if k in str(item.story):
+                arr += [1]
+            else:
+                arr += [0]
+    arr = np.array(arr).reshape(-1, len(key_w))
+    return pd.DataFrame(arr, columns=key_w), key_w
+
+
+shosekika_df, story_w = create_shosekika_feature(raw_df)
+
+
+def create_story_feature(df):
+    arr = []
+    key_w = ["ざまあ", "ざまぁ", "追放", "チート", "婚約破棄", "令嬢", "ハーレム"]
+    for i, item in df.iterrows():
+        for k in key_w:
+            if k in str(item.story):
+                arr += [1]
+            else:
+                arr += [0]
+    key_w=["s_ざまあ", "s_ざまぁ", "s_追放", "s_チート", "s_婚約破棄", "s_令嬢", "s_ハーレム"]
+    arr = np.array(arr).reshape(-1, len(key_w))
+    return pd.DataFrame(arr, columns=key_w), key_w
+
+
+sto_df, sto_w = create_story_feature(raw_df)
+
+
+def create_title_feature(df):
+    arr = []
+    key_w = ["~", "〜", "【"]
+    for i, item in df.iterrows():
+        for k in key_w:
+            if k in str(item.title):
+                arr += [1]
+            else:
+                arr += [0]
+    arr = np.array(arr).reshape(-1, len(key_w))
+    return pd.DataFrame(arr, columns=["~", "〜", "【"]), ["~", "〜", "【"]
+
+
+title_df, title_w = create_title_feature(raw_df)
 
 raw_df["tenni_tennsei"] = raw_df.istenni + raw_df.istensei
 
@@ -94,29 +142,6 @@ for j in set(raw_df.userid):
     for i in range(len(past_days) - 1):
         past_days_from_previous_work.append(past_days.iloc[i] - past_days.iloc[i + 1])
     raw_df.loc[raw_df.userid == j, "past_days_from_previous_work"] = past_days_from_previous_work
-
-raw_df["past_days_from_previous_work_tyohen"] = 10000
-raw_df["past_days_from_previous_work_tanpen"] = 10000
-for j in set(raw_df.userid):
-    past_days_from_previous_work_tyohen = [10000]
-    past_days_from_previous_work_tanpen = [10000]
-
-    tyohen_df = raw_df[raw_df.userid == j][(raw_df[raw_df.userid == j].novel_type == 1)].sort_values(
-        by="general_firstup")
-    tanpen_df = raw_df[raw_df.userid == j][(raw_df[raw_df.userid == j].novel_type == 2)].sort_values(
-        by="general_firstup")
-
-    past_days_tyohen = tyohen_df[tyohen_df.userid == j].past_days
-    past_days_tanpen = tanpen_df[tanpen_df.userid == j].past_days
-
-    for i in range(len(past_days_tyohen) - 1):
-        past_days_from_previous_work_tyohen.append(past_days_tyohen.iloc[i] - past_days_tyohen.iloc[i + 1])
-    for i in range(len(past_days_tanpen) - 1):
-        past_days_from_previous_work_tanpen.append(past_days_tanpen.iloc[i] - past_days_tanpen.iloc[i + 1])
-    if len(tyohen_df) > 0:
-        raw_df["past_days_from_previous_work_tyohen"].loc[tyohen_df.index] = past_days_from_previous_work_tyohen
-    if len(tanpen_df) > 0:
-        raw_df["past_days_from_previous_work_tanpen"].loc[tanpen_df.index] = past_days_from_previous_work_tanpen
 
 raw_df["tanpen_each_count"] = 0
 raw_df["tyohen_each_count"] = 0
@@ -143,18 +168,16 @@ for i in set(raw_df.userid):
 raw_df["mean_fav"] = raw_df["mean_fav"].fillna(0)
 raw_df["sum_fav"] = raw_df["sum_fav"].fillna(0)
 
-concat_df = pd.concat([raw_df, tags_df], axis=1)
+concat_df = pd.concat([raw_df, tags_df, shosekika_df, sto_df, title_df], axis=1)
 concat_df.shape
 
-num_cols = ['userid', 'past_days', 'title_length', 'length']
-
 cat_cols = ['writer', 'biggenre', 'genre', 'novel_type', 'isr15', 'isbl', 'isgl', 'iszankoku', "tenni_tennsei",
-            'pc_or_k'] + key_w
+            'pc_or_k'] + key_w + story_w + sto_w + title_w
+num_cols = ['userid', 'past_days', 'title_length', 'length']
 num_cols += ["past_days_from_previous_work"]
 num_cols += ["genre_each_count", "biggenre_each_count"]
 num_cols += ["mean_fav", "sum_fav"]
 num_cols += ["tanpen_each_count", "tyohen_each_count"]
-num_cols += ["past_days_from_previous_work_tyohen", "past_days_from_previous_work_tanpen"]
 
 feat_cols = cat_cols + num_cols
 
@@ -261,6 +284,8 @@ concat_df = processing_ncode(concat_df)
 num_cols += ['ncode_num']
 
 df = pd.read_csv(Config.train_dir + "/train_stratify.csv")
+
+df = pd.read_csv(Config.train_dir + "/train_stratify.csv")
 df = pd.concat([df, test_df])
 
 concat_df["novel_count"] = pd.DataFrame(np.array([0 for _ in range(len(concat_df))]))
@@ -271,9 +296,11 @@ num_cols += ["novel_count"]
 
 train_df = pd.concat([train_df, train2_df, test_df]).reset_index(drop=True)
 
+
 train_df["count_nn"] = train_df.apply(count_nn_story, axis=1).reset_index(drop=True)
 concat_df = pd.merge(concat_df, train_df.loc[:, ["ncode", "count_nn"]])
 num_cols += ["count_nn"]
+
 
 train_df["count_n"] = train_df.apply(count_n_story, axis=1).reset_index(drop=True)
 concat_df = pd.merge(concat_df, train_df.loc[:, ["ncode", "count_n"]])
@@ -285,70 +312,56 @@ for i in range(len(concat_df)):
     concat_df["biggenre_count"][i] = d[concat_df.biggenre[i]]
 num_cols += ["biggenre_count"]
 
-df1 = pd.read_csv("n86_inference/valid.csv")
-df2 = pd.read_csv("n86_inference/test_submission.csv")
-df = pd.concat([df1, df2]).reset_index(drop=True)
-df.columns = ["ncode", "rmse"]
-concat_df = pd.merge(concat_df, df)
-num_cols += ["rmse"]
-
-df1 = pd.read_csv("n95_01_inference/valid.csv")
-df2 = pd.read_csv("n95_01_inference/test_submission.csv")
-df = pd.concat([df1, df2]).reset_index(drop=True)
-df.columns = ["ncode", "01rmse"]
-concat_df = pd.merge(concat_df, df)
-num_cols += ["01rmse"]
-
-df1 = pd.read_csv("n95_inference/valid.csv")
-df2 = pd.read_csv("n95_inference/test_submission.csv")
-df = pd.concat([df1, df2]).reset_index(drop=True)
-df.columns = ["ncode", "binary"]
-concat_df = pd.merge(concat_df, df)
-num_cols += ["binary"]
-
-df1 = pd.read_csv("n102_inference/valid.csv")
-df2 = pd.read_csv("n102_inference/test_submission.csv")
-df = pd.concat([df1, df2]).reset_index(drop=True)
-df.columns = ["ncode", "binary3"]
-concat_df = pd.merge(concat_df, df)
-num_cols += ["binary3"]
-
-df1 = pd.read_csv("n107_inference/valid.csv")
-df2 = pd.read_csv("n107_inference/test_submission.csv")
-df = pd.concat([df1, df2]).reset_index(drop=True)
-df.columns = ["ncode", "-101rmse"]
-concat_df = pd.merge(concat_df, df)
-num_cols += ["-101rmse"]
 
 concat_df = concat_df.drop_duplicates().reset_index(drop=True)
 
 feat_cols = cat_cols + num_cols
 
-acc = []
-score = []
-
-all_val_df = pd.DataFrame()
 all_preds = []
 all_val_preds = []
+acc = []
+score = []
 for i in range(5):
+    train_df = concat_df[concat_df["fold"] != i]
+    train_df = train_df[train_df["fold"] != 6]
     val_df = concat_df[concat_df["fold"] == i]
     test_df = concat_df[concat_df["fold"] == 6]
+    print(train_df.shape, val_df.shape, test_df.shape)
 
+    train_x = train_df[feat_cols]
+    train_y = train_df[TARGET]
     val_x = val_df[feat_cols]
     val_y = val_df[TARGET]
     test_x = test_df[feat_cols]
     test_y = test_df[TARGET]
-    model = cb.CatBoostRegressor()
-    model.load_model(Config.model_dir + f'/best_model_{i}')
-    val_pred = model.predict(val_x)
-    test_pred = model.predict(test_x)
-    all_preds.append(test_pred)
+    train_x.shape
 
-    all_val_preds += list(val_pred)
+    SEED = 0
+    model = cb.CatBoostClassifier()
+    model.load_model(Config.model_dir + f'/best_model_{i}')
+
+    train_data = cb.Pool(train_x, train_y, cat_features=cat_cols)
+    val_data = cb.Pool(val_x, val_y, cat_features=cat_cols)
+
+    val_pred = model.predict(val_x)
+    accuracy = sum(val_y == np.round(val_pred)) / len(val_y)
+    print(accuracy)
+    test_pred = list(logistic.cdf(model.predict(test_x, prediction_type='RawFormulaVal')))
+    all_preds.append(test_pred)
+    all_val_preds += list(logistic.cdf(model.predict(val_x, prediction_type='RawFormulaVal')))
+
+len(all_val_preds)
+
+all_val_df = pd.DataFrame()
+for i in range(5):
+    val_df = concat_df[concat_df["fold"] == i]
     all_val_df = pd.concat([all_val_df, val_df.ncode])
 all_val_df = all_val_df.reset_index(drop=True)
-all_val_df = pd.concat([all_val_df, pd.DataFrame(all_val_preds)], axis=1)
-all_val_df.columns = ["ncode"] + ["mr_proba_" + str(i) for i in range(5)]
+
+all_val_df["score"] = all_val_preds
+
+all_val_df.columns = ["ncode", "score"]
+
 all_val_df.to_csv(Config.output_dir + "/valid.csv", index=False)
 
 try:
@@ -359,5 +372,7 @@ except:
 all_preds = np.array(all_preds)
 m_preds = all_preds.mean(0)
 
-sub_df.iloc[:, 1:] = m_preds
+sub_df = sub_df.iloc[:, :2]
+sub_df.iloc[:, 1] = m_preds
+sub_df.columns = ["ncode", "score"]
 sub_df.to_csv(Config.output_dir + '/test_submission.csv', index=False)

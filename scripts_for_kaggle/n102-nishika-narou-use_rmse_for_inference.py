@@ -6,6 +6,7 @@ import pandas as pd
 from scipy.stats import logistic
 from scipy.special import softmax
 import re
+import json
 
 from utils.preprocess import remove_url,processing_ncode,count_keyword,count_nn_story,count_n_story
 
