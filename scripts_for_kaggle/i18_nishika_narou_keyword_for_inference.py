@@ -22,6 +22,8 @@ import torch
 import torch.nn as nn
 import re
 import json
+import sys
+sys.path.append("./nishika-narou-2021-1st-place-solution")
 
 from scipy.special import softmax
 

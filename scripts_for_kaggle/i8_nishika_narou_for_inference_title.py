@@ -24,6 +24,8 @@ import re
 import json
 
 from scipy.special import softmax
+import sys
+sys.path.append("./nishika-narou-2021-1st-place-solution")
 
 from utils.preprocess import remove_url
 from utils.model import NarouModel

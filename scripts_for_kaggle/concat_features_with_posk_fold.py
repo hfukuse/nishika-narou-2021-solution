@@ -7,6 +7,8 @@ import pandas as pd
 import tqdm
 import argparse
 import json
+import sys
+sys.path.append("./nishika-narou-2021-1st-place-solution")
 
 
 def make_parse():

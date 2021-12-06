@@ -4,6 +4,8 @@ import pandas as pd
 from sklearn.model_selection import StratifiedKFold, train_test_split
 import argparse
 import json
+import sys
+sys.path.append("./nishika-narou-2021-1st-place-solution")
 warnings.filterwarnings('ignore')
 
 seed = 42
