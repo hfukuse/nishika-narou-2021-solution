@@ -32,7 +32,7 @@ class Config:
 os.system('mkdir -p ' + Config.pos_dir)
 
 train_df = pd.read_csv(Config.train_dir + '/kfold_2021_06.csv')
-train2_df = pd.read_csv(Config.train_dir + '/kfolda_from_2020_to_2021_06.csv')
+train2_df = pd.read_csv(Config.train_dir + '/kfold_from_2020_to_2021_06.csv')
 test_df = pd.read_csv(Config.dataset_dir + '/test.csv')
 sub_df = pd.read_csv(Config.dataset_dir + '/sample_submission.csv')
 
