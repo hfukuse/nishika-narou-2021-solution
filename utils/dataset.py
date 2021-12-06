@@ -7,10 +7,10 @@ import torch
 import torch.nn as nn
 import re
 
-def convert_examples_to_features(text, tokenizer):
+def convert_examples_to_features(text, tokenizer, max_len=256):
     tok = tokenizer.encode_plus(
         text,
-        max_length=Config.max_len,
+        max_length=max_len,
         truncation=True,
         padding='max_length')
     return tok
