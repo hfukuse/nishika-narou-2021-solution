@@ -1,0 +1,22 @@
+ディレクトリの最上位にディレクトリツリーを作成します。サンプルファイルはこちらです。
+ディレクトリ最上位からLinuxコマンドfind . -type d > directory_structure.txtを実行して生成される形式などを推奨します。
+
+
+
+
+目標
+.
+./features
+./features/importances
+./utils
+./models
+全部のmodel
+
+./logs
+./configs
+./scripts
+./data
+./data/input
+./data/output
+ここにpreprocess data?
+./notebooks
