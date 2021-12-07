@@ -8,6 +8,7 @@ from transformers import (AutoModel, AutoModelForMaskedLM,
                           AutoTokenizer, LineByLineTextDataset,
                           DataCollatorForLanguageModeling,
                           Trainer, TrainingArguments)
+import json
 
 warnings.filterwarnings('ignore')
 os.system('pip install transformers fugashi ipadic unidic_lite --quiet')
