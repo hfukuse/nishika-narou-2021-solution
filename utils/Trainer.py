@@ -143,7 +143,7 @@ class Trainer:
                     if val_loss < best_val_loss:
                         best_val_loss = val_loss.item()
                         print(f"\t\t{g_}Val loss decreased from {best_val_loss} to {val_loss}{sr_}")
-                        torch.save(self.model, self.Config.models_dir / f"best_model_{self.model_num}.pt")
+                        torch.save(self.model, self.Config.model_dir / f"best_model_{self.model_num}.pt")
 
                     evaluation_scheduler.update_evaluation_interval(val_loss.item())
 
