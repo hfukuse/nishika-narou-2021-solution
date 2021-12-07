@@ -82,8 +82,10 @@ def main():
         tokenizer=tokenizer, mlm=True, mlm_probability=0.15)
 
     num_train_epochs = 3
+    eval_steps = 400
     if args.debug:
         num_train_epochs = 1
+        eval_steps = 2169
 
     training_args = TrainingArguments(
         output_dir=Config.pretrained_model_path + "/bert_base_chk",
@@ -93,7 +95,7 @@ def main():
         per_device_eval_batch_size=16,
         evaluation_strategy='steps',
         save_total_limit=2,
-        eval_steps=400,
+        eval_steps=eval_steps,
         metric_for_best_model='eval_loss',
         greater_is_better=False,
         load_best_model_at_end=True,
