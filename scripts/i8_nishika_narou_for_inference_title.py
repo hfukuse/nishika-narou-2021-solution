@@ -17,13 +17,15 @@ import matplotlib.pyplot as plt
 plt.style.use('seaborn-talk')
 from colorama import Fore, Back, Style
 from sklearn.metrics import log_loss
-import json
 
 import torch
 import torch.nn as nn
 import re
+import json
 
 from scipy.special import softmax
+import sys
+sys.path.append("./nishika-narou-2021-1st-place-solution")
 
 from utils.preprocess import remove_url
 from utils.model import NarouModel
@@ -43,7 +45,7 @@ def make_parse():
     parser = argparse.ArgumentParser()
     arg = parser.add_argument
     arg("--debug", action="store_true", help="debug")
-    arg("--settings", default="./settings.json", type=str, help="settings path")
+    arg("--settings", default="./nishika-narou-2021-1st-place-solution/settings_for_kaggle.json", type=str, help="settings path")
     arg("--is_test", action="store_true", help="test")
     return parser
 
