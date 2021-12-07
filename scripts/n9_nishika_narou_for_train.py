@@ -81,7 +81,7 @@ from optimizer import create_optimizer
 from utils import seed_everything
 
 def make_dataloader(data, tokenizer, is_train=True):
-    dataset = NishikaNarouDataset(data, tokenizer=tokenizer, max_len=Config.max_len)
+    dataset = NishikaNarouDataset(data, tokenizer=tokenizer)
     if is_train:
         sampler = RandomSampler(dataset)
     else:

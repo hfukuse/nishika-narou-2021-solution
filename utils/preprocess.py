@@ -3,7 +3,7 @@ import pandas as pd
 
 
 def remove_url(sentence):
-    ret = re.sub(r"(http?|ftp)(:\/\/[-_\.!~*\'()a-zA-Z0-9;\/?:\@&=\+$,%#]+)", "", sentence)
+    ret = re.sub(r"(http?|ftp)(:\/\/[-_\.!~*\'()a-zA-Z0-9;\/?:\@&=\+$,%#]+)", "", str(sentence))
     return ret
 
 def processing_ncode(input_df: pd.DataFrame):#引用:https://www.nishika.com/competitions/21/topics/164

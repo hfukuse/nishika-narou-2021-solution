@@ -32,7 +32,7 @@ class NishikaNarouDataset(Dataset):
             excerpt = self.excerpts[item]
             label = self.targets[item]
             features = convert_examples_to_features(
-                excerpt, self.tokenizer
+                excerpt, self.tokenizer, Config.max_len
             )
             return {
                 'input_ids': torch.tensor(features['input_ids'], dtype=torch.long),
@@ -42,7 +42,7 @@ class NishikaNarouDataset(Dataset):
         else:
             excerpt = self.excerpts[item]
             features = convert_examples_to_features(
-                excerpt, self.tokenizer
+                excerpt, self.tokenizer, Config.max_len
             )
             return {
                 'input_ids': torch.tensor(features['input_ids'], dtype=torch.long),
