@@ -2,7 +2,6 @@ import warnings
 import os
 import pandas as pd
 from sklearn.model_selection import StratifiedKFold, train_test_split
-import argparse
 import json
 import sys
 import argparse
@@ -14,7 +13,7 @@ seed = 42
 def make_parse():
     parser = argparse.ArgumentParser()
     arg = parser.add_argument
-    arg("--settings", default="./nishika-narou-2021-1st-place-solution/settings.json", type=str, help="settings path")
+    arg("--settings", default="./settings.json", type=str, help="settings path")
     return parser
 
 
