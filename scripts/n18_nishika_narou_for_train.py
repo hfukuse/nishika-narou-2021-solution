@@ -97,7 +97,7 @@ def loss_fn(y_true, y_pred):
 
 def main():
     os.system("pip install transformers fugashi ipadic unidic_lite --quiet")
-    os.system("mkdir -p " + Config.models_dir)
+    os.system("mkdir -p " + Config.model_dir)
 
     seed_everything(seed=Config.seed)
 
