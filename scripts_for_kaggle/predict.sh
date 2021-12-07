@@ -1,3 +1,4 @@
+#bertを用いた特徴量の生成
 #i8_inferenceを作成
 python ./nishika-narou-2021-1st-place-solution/scripts_for_kaggle/i8_nishika_narou_for_inference_title.py
 #i9_inferenceを作成
@@ -12,6 +13,7 @@ python ./nishika-narou-2021-1st-place-solution/scripts_for_kaggle/i42_nishika_na
 python ./nishika-narou-2021-1st-place-solution/scripts_for_kaggle/i43_nishika_narou_keyword_for_inference.py
 
 
+#catboostを用いた特徴量の生成
 #i86_inferenceを作成
 python ./nishika-narou-2021-1st-place-solution/scripts_for_kaggle/n86-nishika-narou-use_rmse_for_inference.py
 #i95_inferenceを作成
@@ -25,4 +27,5 @@ python ./nishika-narou-2021-1st-place-solution/scripts_for_kaggle/n107-nishika-n
 #i117_inferenceを作成
 python ./nishika-narou-2021-1st-place-solution/scripts_for_kaggle/n117-nishika-narou-change-multirmse_for_inference.py
 
+#最終モデルによる予測
 python ./nishika-narou-2021-1st-place-solution/scripts_for_kaggle/predict.py
