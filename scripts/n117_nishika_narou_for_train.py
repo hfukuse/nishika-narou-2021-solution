@@ -52,6 +52,7 @@ class Config:
 
 
 sys.path.append(Config.narou_dir)
+sys.path.append(os.path.basename(__file__)+"/..")
 from utils.preprocess import remove_url,processing_ncode,count_keyword,count_nn_story,count_n_story
 
 os.system('pip install transformers fugashi ipadic unidic_lite --quiet')
