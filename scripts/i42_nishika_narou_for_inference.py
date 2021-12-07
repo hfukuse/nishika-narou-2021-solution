@@ -23,13 +23,10 @@ import torch.nn as nn
 import re
 import json
 import sys
-sys.path.append("./nishika-narou-2021-1st-place-solution")
+
 
 from scipy.special import softmax
 
-from utils.preprocess import remove_url
-from utils.model import NarouModel
-from utils.dataset import NishikaNarouDataset
 
 r_ = Fore.RED
 b_ = Fore.BLUE
@@ -65,6 +62,13 @@ class Config:
     output_dir = js["i42"]["output_dir"]
     max_len = js["i42"]["max_len"]
     model_dir = js["models_dir"]+"/"+js["i42"]["model_dir"]
+    narou_dir = js["narou_dir"]
+
+sys.path.append(Config.narou_dir)
+
+from utils.preprocess import remove_url
+from utils.model import NarouModel
+from utils.dataset import NishikaNarouDataset
 
 
 os.system('pip install transformers fugashi ipadic unidic_lite --quiet')

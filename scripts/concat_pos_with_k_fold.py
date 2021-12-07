@@ -8,7 +8,7 @@ import pandas as pd
 import tqdm
 import json
 import sys
-sys.path.append("./nishika-narou-2021-1st-place-solution")
+
 
 os.system('pip install xfeat --quiet')
 
