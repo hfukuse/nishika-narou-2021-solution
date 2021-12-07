@@ -13,16 +13,16 @@ python ./nishika-narou-2021-1st-place-solution/scripts_for_kaggle/i43_nishika_na
 
 
 #i86_inferenceを作成
-python ./nishika-narou-2021-1st-place-solution/scripts_for_kaggle/n86_nishika_narou_use_rmse_for_inference.py
+python ./nishika-narou-2021-1st-place-solution/scripts_for_kaggle/n86-nishika-narou-use_rmse_for_inference.py
 #i95_inferenceを作成
-python ./nishika-narou-2021-1st-place-solution/scripts_for_kaggle/n95_nishika_narou_use_rmse_for_inference.py
+python ./nishika-narou-2021-1st-place-solution/scripts_for_kaggle/n95-nishika-narou-use_rmse_for_inference.py
 #i95_01_inferenceを作成
-python ./nishika-narou-2021-1st-place-solution/scripts_for_kaggle/n95_nishika_narou_use_rmse_01_for_inference.py
+python ./nishika-narou-2021-1st-place-solution/scripts_for_kaggle/n95-nishika-narou-use_rmse_01_for_inference.py
 #i102_inferenceを作成
-python ./nishika-narou-2021-1st-place-solution/scripts_for_kaggle/n102_nishika_narou_use_rmse_for_inference.py
+python ./nishika-narou-2021-1st-place-solution/scripts_for_kaggle/n102-nishika-narou-use_rmse_for_inference.py
 #i107_inferenceを作成
-python ./nishika-narou-2021-1st-place-solution/scripts_for_kaggle/n107_nishika_narou_use_rmse_for_inference.py
+python ./nishika-narou-2021-1st-place-solution/scripts_for_kaggle/n107-nishika-narou-use_rmse_for_inference.py
 #i117_inferenceを作成
-python ./nishika-narou-2021-1st-place-solution/scripts_for_kaggle/n117_nishika_narou_change_multirmse_for_inference.py
+python ./nishika-narou-2021-1st-place-solution/scripts_for_kaggle/n117-nishika-narou-change-multirmse_for_inference.py
 
 python ./nishika-narou-2021-1st-place-solution/scripts_for_kaggle/predict.py
