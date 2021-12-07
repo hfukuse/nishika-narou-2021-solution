@@ -21,6 +21,7 @@ def make_parse():
     arg("--is_test", action="store_true", help="test")
     return parser
 
+args = make_parse().parse_args()
 
 with open(args.settings) as f:
     js = json.load(f)
@@ -46,8 +47,6 @@ from preprocess import remove_url
 
 
 def main():
-    args = make_parse().parse_args()
-
     train_data = pd.read_csv(Config.train_dir + '/kfold_2021_07.csv')
     test_data = pd.read_csv(Config.dataset_dir + '/test.csv')
 
