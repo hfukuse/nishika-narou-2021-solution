@@ -10,7 +10,6 @@ import json
 import sys
 import argparse
 
-
 def make_parse():
     parser = argparse.ArgumentParser()
     arg = parser.add_argument
@@ -34,8 +33,8 @@ class Config:
     item = js["item"]
     dataset_dir = js["dataset_dir"]
     pos_dir = js["pos_dir"]
-    output_dir = js["n86"]["output_dir"]
-    model_dir = js["models_dir"]+"/"+js["n86"]["model_dir"]
+    output_dir = js["n107"]["output_dir"]
+    model_dir = js["models_dir"]+"/"+js["n107"]["model_dir"]
     narou_dir = js["narou_dir"]
     i8_inf=js["i8"]["output_dir"]
     i9_inf=js["i9"]["output_dir"]
@@ -43,6 +42,7 @@ class Config:
     i41_inf=js["i41"]["output_dir"]
     i42_inf=js["i42"]["output_dir"]
     i43_inf=js["i43"]["output_dir"]
+
 
 sys.path.append(Config.narou_dir)
 from utils.preprocess import remove_url,processing_ncode,count_keyword,count_nn_story,count_n_story
@@ -285,9 +285,11 @@ feat_cols = cat_cols + num_cols
 
 concat_df = pd.merge(concat_df, bert_df)
 
+
 concat_df.keyword[concat_df.keyword.isnull()] = "None"
 concat_df["count_keyword"] = concat_df.apply(count_keyword, axis=1)
 num_cols += ["count_keyword"]
+
 
 concat_df = processing_ncode(concat_df)
 num_cols += ['ncode_num']
@@ -319,7 +321,10 @@ for i in range(len(concat_df)):
     concat_df["biggenre_count"][i] = d[concat_df.biggenre[i]]
 num_cols += ["biggenre_count"]
 
+
 concat_df = concat_df.drop_duplicates().reset_index(drop=True)
+d={0:-1,1:-1,2:0,3:1,4:1}
+concat_df.fav_novel_cnt_bin=concat_df.fav_novel_cnt_bin.map(d)
 
 feat_cols = cat_cols + num_cols
 
@@ -342,19 +347,40 @@ for i in range(5):
     test_y = test_df[TARGET]
     train_x.shape
 
-    SEED = 0
-    model = cb.CatBoostRegressor()
-    model.load_model(Config.model_dir + f'/best_model_{i}')
+    params = {
+        "random_state": 420,
+        "num_boost_round": 50000,
+        "early_stopping_rounds": 150,
+        "task_type": "CPU",
+        "use_best_model": True
+    }
+    if Config.debug:
+        params["num_boost_round"]=1
+
+    model = cb.CatBoostRegressor(**params)
 
     train_data = cb.Pool(train_x, train_y, cat_features=cat_cols)
     val_data = cb.Pool(val_x, val_y, cat_features=cat_cols)
+    model = model.fit(
+        train_data,
+        eval_set=val_data,
+        early_stopping_rounds=150,
+        verbose=100
+    )
 
     val_pred = model.predict(val_x)
-    test_pred =model.predict(test_x)
+    accuracy = sum(val_y == np.round(val_pred)) / len(val_y)
+    print(accuracy)
+    test_pred = model.predict(test_x)
     all_preds.append(test_pred)
-    all_val_preds+=list(val_pred)
-
-len(all_val_preds)
+    all_val_preds += list(val_pred)
+    model.save_model(Config.model_dir + f'/best_model_{i}')
+    acc.append(accuracy)
+    score.append(model.best_score_["validation"])
+print("**acc**")
+print(np.mean(np.array(acc)))
+print("**score**")
+print(np.mean(np.array(acc)))
 
 all_val_df = pd.DataFrame()
 for i in range(5):
@@ -371,7 +397,7 @@ all_val_df.to_csv(Config.output_dir + "/valid.csv", index=False)
 try:
     print(np.bincount(np.round(val_pred).astype(int)))
 except:
-    print("error bincount")
+    print("error")
 
 all_preds = np.array(all_preds)
 m_preds = all_preds.mean(0)

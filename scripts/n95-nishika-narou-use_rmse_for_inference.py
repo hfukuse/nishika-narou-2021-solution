@@ -16,7 +16,7 @@ def make_parse():
     parser = argparse.ArgumentParser()
     arg = parser.add_argument
     arg("--debug", action="store_true", help="debug")
-    arg("--settings", default="./nishika-narou-2021-1st-place-solution/settings_for_kaggle.json", type=str, help="settings path")
+    arg("--settings", default="./nishika-narou-2021-1st-place-solution/settings.json", type=str, help="settings path")
     arg("--is_test", action="store_true", help="test")
     return parser
 
@@ -293,8 +293,6 @@ num_cols += ["count_keyword"]
 
 concat_df = processing_ncode(concat_df)
 num_cols += ['ncode_num']
-
-df = pd.read_csv(Config.train_dir + "/train_stratify.csv")
 
 df = pd.read_csv(Config.train_dir + "/train_stratify.csv")
 df = pd.concat([df, test_df])

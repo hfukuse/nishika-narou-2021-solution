@@ -6,46 +6,63 @@ import pandas as pd
 from scipy.stats import logistic
 from scipy.special import softmax
 import re
+import json
+import sys
+import argparse
 
+
+
+def make_parse():
+    parser = argparse.ArgumentParser()
+    arg = parser.add_argument
+    arg("--debug", action="store_true", help="debug")
+    arg("--settings", default="./nishika-narou-2021-1st-place-solution/settings.json", type=str, help="settings path")
+    arg("--is_test", action="store_true", help="test")
+    return parser
+
+args = make_parse().parse_args()
+
+with open(args.settings) as f:
+    js = json.load(f)
 
 class Config:
-    model_name = "cl-tohoku/bert-base-japanese-v2"
-    pretrained_model_path = "cl-tohoku/bert-base-japanese-v2"
-    output_hidden_states = True
-    epochs = 3
-    batch_size = 16
-    device = "cuda"
-    seed = 42
-    max_len = 256
-    train_dir = "./train_val_split"
-    item = ["story", "title", "keyword"]
-    item_num = 0  # 0ならstory(あらすじ),1ならtitle(題名),2ならkeyword(タグ)
-    output_dir = "n95_inference"
-    dataset_dir = "../input/nishika-narou"
-    model_dir = "../input/all-model-nishika-narou/n95_rmse_model"
-    pos_dir = "./nishika-narou-train-with-pos"
+    model_name = js["model_name"]
+    output_hidden_states = js["output_hidden_states"]
+    batch_size = js["batch_size"]
+    device = js["device"]
+    seed = js["seed"]
+    train_dir = js["train_dir"]
+    item = js["item"]
+    dataset_dir = js["dataset_dir"]
+    pos_dir = js["pos_dir"]
+    output_dir = js["n95_01"]["output_dir"]
+    model_dir = js["models_dir"]+"/"+js["n95_01"]["model_dir"]
+    narou_dir = js["narou_dir"]
+    i8_inf=js["i8"]["output_dir"]
+    i9_inf=js["i9"]["output_dir"]
+    i18_inf=js["i18"]["output_dir"]
+    i41_inf=js["i41"]["output_dir"]
+    i42_inf=js["i42"]["output_dir"]
+    i43_inf=js["i43"]["output_dir"]
 
 
-os.system("pip install transformers fugashi ipadic unidic_lite --quiet")
-os.system("mkdir -p " + Config.output_dir)
+sys.path.append(Config.narou_dir)
+from utils.preprocess import remove_url,processing_ncode,count_keyword,count_nn_story,count_n_story
 
-train_df = pd.read_csv(Config.train_dir + "/kfold_2021_06.csv")
-train2_df = pd.read_csv(Config.train_dir + "/kfold_from_2020_to_2021_06.csv")
-test_df = pd.read_csv(Config.dataset_dir + "/test.csv")
-sub_df = pd.read_csv(Config.dataset_dir + "/sample_submission.csv")
+os.system('pip install transformers fugashi ipadic unidic_lite --quiet')
+os.system('mkdir -p ' + Config.output_dir)
+
+train_df = pd.read_csv(Config.train_dir + '/kfold_2021_06.csv')
+train2_df = pd.read_csv(Config.train_dir + '/kfold_from_2020_to_2021_06.csv')
+test_df = pd.read_csv(Config.dataset_dir + '/test.csv')
+sub_df = pd.read_csv(Config.dataset_dir + '/sample_submission.csv')
 
 test_df["fold"] = 6
 
 raw_df = pd.concat([train_df, test_df])
 
 raw_df["excerpt"] = raw_df["story"]
-raw_df.story = raw_df.story.replace("\n", "", regex=True)
-
-
-def remove_url(sentence):
-    ret = re.sub(r"(http?|ftp)(:\/\/[-_\.!~*\"()a-zA-Z0-9;\/?:\@&=\+$,%#]+)", "", str(sentence))
-    return ret
-
+raw_df.story = raw_df.story.replace('\n', '', regex=True)
 
 raw_df.story = raw_df.story.map(remove_url)
 
@@ -166,9 +183,9 @@ raw_df["sum_fav"] = raw_df["sum_fav"].fillna(0)
 concat_df = pd.concat([raw_df, tags_df, shosekika_df, sto_df, title_df], axis=1)
 concat_df.shape
 
-cat_cols = ["writer", "biggenre", "genre", "novel_type", "isr15", "isbl", "isgl", "iszankoku", "tenni_tennsei",
-            "pc_or_k"] + key_w + story_w + sto_w + title_w
-num_cols = ["userid", "past_days", "title_length", "length"]
+cat_cols = ['writer', 'biggenre', 'genre', 'novel_type', 'isr15', 'isbl', 'isgl', 'iszankoku', "tenni_tennsei",
+            'pc_or_k'] + key_w + story_w + sto_w + title_w
+num_cols = ['userid', 'past_days', 'title_length', 'length']
 num_cols += ["past_days_from_previous_work"]
 num_cols += ["genre_each_count", "biggenre_each_count"]
 num_cols += ["mean_fav", "sum_fav"]
@@ -176,12 +193,12 @@ num_cols += ["tanpen_each_count", "tyohen_each_count"]
 
 feat_cols = cat_cols + num_cols
 
-ID = "ncode"
-TARGET = "fav_novel_cnt_bin"
+ID = 'ncode'
+TARGET = 'fav_novel_cnt_bin'
 
-te_pred = pd.read_csv("i9_inference/submission.csv")
-val_pred = pd.read_csv("i9_inference/val_pred.csv")
-val2_pred = pd.read_csv("i9_inference/kfold_from_2020_to_2021_06_val_pred.csv")
+te_pred = pd.read_csv(Config.i9_inf+"/submission.csv")
+val_pred = pd.read_csv(Config.i9_inf+"/val_pred.csv")
+val2_pred = pd.read_csv(Config.i9_inf+"/kfold_from_2020_to_2021_06_val_pred.csv")
 val_pred.columns = te_pred.columns
 val2_pred.columns = te_pred.columns
 val_pred.iloc[:, 1:] = softmax(np.array(val_pred.iloc[:, 1:]), axis=1)
@@ -193,9 +210,9 @@ feat_cols = cat_cols + num_cols
 
 concat_df = pd.merge(concat_df, bert_df)
 
-te_pred = pd.read_csv("i8_inference/submission.csv")
-val_pred = pd.read_csv("i8_inference/val_pred.csv")
-val2_pred = pd.read_csv("i8_inference/kfold_from_2020_to_2021_06_val_pred.csv")
+te_pred = pd.read_csv(Config.i8_inf+"/submission.csv")
+val_pred = pd.read_csv(Config.i8_inf+"/val_pred.csv")
+val2_pred = pd.read_csv(Config.i8_inf+"/kfold_from_2020_to_2021_06_val_pred.csv")
 
 te_pred.columns = ["ncode", "t_proba_0", "t_proba_1", "t_proba_2", "t_proba_3", "t_proba_4"]
 val_pred.columns = te_pred.columns
@@ -209,9 +226,9 @@ feat_cols = cat_cols + num_cols
 
 concat_df = pd.merge(concat_df, bert_df)
 
-te_pred = pd.read_csv("i18_inference/submission.csv")
-val_pred = pd.read_csv("i18_inference/val_pred.csv")
-val2_pred = pd.read_csv("i18_inference/kfold_from_2020_to_2021_06_val_pred.csv")
+te_pred = pd.read_csv(Config.i18_inf+"/submission.csv")
+val_pred = pd.read_csv(Config.i18_inf+"/val_pred.csv")
+val2_pred = pd.read_csv(Config.i18_inf+"/kfold_from_2020_to_2021_06_val_pred.csv")
 
 te_pred.columns = ["ncode", "k_proba_0", "k_proba_1", "k_proba_2", "k_proba_3", "k_proba_4"]
 val_pred.columns = te_pred.columns
@@ -225,9 +242,9 @@ feat_cols = cat_cols + num_cols
 
 concat_df = pd.merge(concat_df, bert_df)
 
-te_pred = pd.read_csv("i41_inference/submission.csv")
-val_pred = pd.read_csv("i41_inference/val_pred.csv")
-val2_pred = pd.read_csv("i41_inference/kfold_2021_06_val_pred.csv")
+te_pred = pd.read_csv(Config.i41_inf+"/submission.csv")
+val_pred = pd.read_csv(Config.i41_inf+"/val_pred.csv")
+val2_pred = pd.read_csv(Config.i41_inf+"/kfold_2021_06_val_pred.csv")
 te_pred.columns = ["ncode", "n48_t_proba_0", "n48_t_proba_1", "n48_t_proba_2", "n48_t_proba_3", "n48_t_proba_4"]
 val_pred.columns = te_pred.columns
 val2_pred.columns = te_pred.columns
@@ -240,9 +257,9 @@ feat_cols = cat_cols + num_cols
 
 concat_df = pd.merge(concat_df, bert_df)
 
-te_pred = pd.read_csv("i42_inference/submission.csv")
-val_pred = pd.read_csv("i42_inference/val_pred.csv")
-val2_pred = pd.read_csv("i42_inference/kfold_2021_06_val_pred.csv")
+te_pred = pd.read_csv(Config.i42_inf+"/submission.csv")
+val_pred = pd.read_csv(Config.i42_inf+"/val_pred.csv")
+val2_pred = pd.read_csv(Config.i42_inf+"/kfold_2021_06_val_pred.csv")
 te_pred.columns = ["ncode", "n48_s_proba_0", "n48_s_proba_1", "n48_s_proba_2", "n48_s_proba_3", "n48_s_proba_4"]
 val_pred.columns = te_pred.columns
 val2_pred.columns = te_pred.columns
@@ -255,9 +272,9 @@ feat_cols = cat_cols + num_cols
 
 concat_df = pd.merge(concat_df, bert_df)
 
-te_pred = pd.read_csv("i43_inference/submission.csv")
-val_pred = pd.read_csv("i43_inference/val_pred.csv")
-val2_pred = pd.read_csv("i43_inference/kfold_2021_06_val_pred.csv")
+te_pred = pd.read_csv(Config.i43_inf+"/submission.csv")
+val_pred = pd.read_csv(Config.i43_inf+"/val_pred.csv")
+val2_pred = pd.read_csv(Config.i43_inf+"/kfold_2021_06_val_pred.csv")
 te_pred.columns = ["ncode", "n48_k_proba_0", "n48_k_proba_1", "n48_k_proba_2", "n48_k_proba_3", "n48_k_proba_4"]
 val_pred.columns = te_pred.columns
 val2_pred.columns = te_pred.columns
@@ -270,40 +287,12 @@ feat_cols = cat_cols + num_cols
 
 concat_df = pd.merge(concat_df, bert_df)
 
-
-def count_keyword(x):
-    return x.keyword.count(" ")
-
-
 concat_df.keyword[concat_df.keyword.isnull()] = "None"
 concat_df["count_keyword"] = concat_df.apply(count_keyword, axis=1)
 num_cols += ["count_keyword"]
 
-
-def processing_ncode(input_df: pd.DataFrame):
-    output_df = input_df.copy()
-
-    num_dict = {chr(i): i - 65 for i in range(65, 91)}
-
-    def _processing(x, num_dict=num_dict):
-        y = 0
-        for i, c in enumerate(x[::-1]):
-            num = num_dict[c]
-            y += 26 ** i * num
-        y *= 9999
-        return y
-
-    tmp_df = pd.DataFrame()
-    tmp_df["_ncode_num"] = input_df["ncode"].map(lambda x: x[1:5]).astype(int)
-    tmp_df["_ncode_chr"] = input_df["ncode"].map(lambda x: x[5:])
-    tmp_df["_ncode_chr2num"] = tmp_df["_ncode_chr"].map(lambda x: _processing(x))
-
-    output_df["ncode_num"] = tmp_df["_ncode_num"] + tmp_df["_ncode_chr2num"]
-    return output_df
-
-
 concat_df = processing_ncode(concat_df)
-num_cols += ["ncode_num"]
+num_cols += ['ncode_num']
 
 df = pd.read_csv(Config.train_dir + "/train_stratify.csv")
 
@@ -311,39 +300,27 @@ df = pd.read_csv(Config.train_dir + "/train_stratify.csv")
 df = pd.concat([df, test_df])
 
 concat_df["novel_count"] = pd.DataFrame(np.array([0 for _ in range(len(concat_df))]))
-d = dict(df["userid"].value_counts(dropna=False))
+d = dict(df['userid'].value_counts(dropna=False))
 for i in range(len(concat_df)):
     concat_df["novel_count"][i] = d[concat_df.userid[i]]
 num_cols += ["novel_count"]
 
 train_df = pd.concat([train_df, train2_df, test_df]).reset_index(drop=True)
 
-
-def count_nn_story(x):
-    return x.story.count("\n\n")
-
-
 train_df["count_nn"] = train_df.apply(count_nn_story, axis=1).reset_index(drop=True)
 concat_df = pd.merge(concat_df, train_df.loc[:, ["ncode", "count_nn"]])
 num_cols += ["count_nn"]
-
-
-def count_n_story(x):
-    return x.story.count("\n")
-
 
 train_df["count_n"] = train_df.apply(count_n_story, axis=1).reset_index(drop=True)
 concat_df = pd.merge(concat_df, train_df.loc[:, ["ncode", "count_n"]])
 num_cols += ["count_n"]
 
 concat_df["biggenre_count"] = pd.DataFrame(np.array([0 for _ in range(len(concat_df))]))
-d = dict(concat_df["biggenre"].value_counts(dropna=False))
+d = dict(concat_df['biggenre'].value_counts(dropna=False))
 for i in range(len(concat_df)):
     concat_df["biggenre_count"][i] = d[concat_df.biggenre[i]]
 num_cols += ["biggenre_count"]
 
-print(len(concat_df))
-print(len(concat_df.drop_duplicates()))
 concat_df = concat_df.drop_duplicates().reset_index(drop=True)
 
 feat_cols = cat_cols + num_cols
@@ -365,23 +342,40 @@ for i in range(5):
     val_y = val_df[TARGET]
     test_x = test_df[feat_cols]
     test_y = test_df[TARGET]
-    train_x.shape
 
-    SEED = 0
-    model = cb.CatBoostClassifier()
-    model.load_model(Config.model_dir + f"/best_model_{i}")
+    params = {
+        "random_state": 420,
+        "num_boost_round": 50000,
+        "early_stopping_rounds": 150,
+        "task_type": "CPU",
+        "use_best_model": True
+    }
+
+    model = cb.CatBoostRegressor(**params)
 
     train_data = cb.Pool(train_x, train_y, cat_features=cat_cols)
     val_data = cb.Pool(val_x, val_y, cat_features=cat_cols)
+    model = model.fit(
+        train_data,
+        eval_set=val_data,
+        early_stopping_rounds=150,
+        verbose=100
+    )
 
     val_pred = model.predict(val_x)
     accuracy = sum(val_y == np.round(val_pred)) / len(val_y)
     print(accuracy)
-    test_pred = list(logistic.cdf(model.predict(test_x, prediction_type="RawFormulaVal")))
+    test_pred = model.predict(test_x)  # _proba(test_x)
     all_preds.append(test_pred)
-    all_val_preds += list(logistic.cdf(model.predict(val_x, prediction_type="RawFormulaVal")))
+    all_val_preds += list(val_pred)
+    model.save_model(Config.model_dir + f'/best_model_{i}')
 
-len(all_val_preds)
+    acc.append(accuracy)
+    score.append(model.best_score_["validation"])
+print("**acc**")
+print(np.mean(np.array(acc)))
+print("**score**")
+print(np.mean(np.array(acc)))
 
 all_val_df = pd.DataFrame()
 for i in range(5):
@@ -406,4 +400,4 @@ m_preds = all_preds.mean(0)
 sub_df = sub_df.iloc[:, :2]
 sub_df.iloc[:, 1] = m_preds
 sub_df.columns = ["ncode", "score"]
-sub_df.to_csv(Config.output_dir + "/test_submission.csv", index=False)
+sub_df.to_csv(Config.output_dir + '/test_submission.csv', index=False)

@@ -16,7 +16,7 @@ def make_parse():
     parser = argparse.ArgumentParser()
     arg = parser.add_argument
     arg("--debug", action="store_true", help="debug")
-    arg("--settings", default="./nishika-narou-2021-1st-place-solution/settings_for_kaggle.json", type=str, help="settings path")
+    arg("--settings", default="./nishika-narou-2021-1st-place-solution/settings.json", type=str, help="settings path")
     arg("--is_test", action="store_true", help="test")
     return parser
 
@@ -301,36 +301,36 @@ for i in range(len(concat_df)):
     concat_df["biggenre_count"][i] = d[concat_df.biggenre[i]]
 num_cols += ["biggenre_count"]
 
-df1 = pd.read_csv("n86_inference/valid.csv")
-df2 = pd.read_csv("n86_inference/test_submission.csv")
+df1 = pd.read_csv(Config.n86_inf+"/valid.csv")
+df2 = pd.read_csv(Config.n86_inf+"/test_submission.csv")
 df = pd.concat([df1, df2]).reset_index(drop=True)
 df.columns = ["ncode", "rmse"]
 concat_df = pd.merge(concat_df, df)
 num_cols += ["rmse"]
 
-df1 = pd.read_csv("n95_01_inference/valid.csv")
-df2 = pd.read_csv("n95_01_inference/test_submission.csv")
+df1 = pd.read_csv(Config.n95_01_inf+"/valid.csv")
+df2 = pd.read_csv(Config.n95_01_inf+"/test_submission.csv")
 df = pd.concat([df1, df2]).reset_index(drop=True)
 df.columns = ["ncode", "01rmse"]
 concat_df = pd.merge(concat_df, df)
 num_cols += ["01rmse"]
 
-df1 = pd.read_csv("n95_inference/valid.csv")
-df2 = pd.read_csv("n95_inference/test_submission.csv")
+df1 = pd.read_csv(Config.n95_inf+"/valid.csv")
+df2 = pd.read_csv(Config.n95_inf+"/test_submission.csv")
 df = pd.concat([df1, df2]).reset_index(drop=True)
 df.columns = ["ncode", "binary"]
 concat_df = pd.merge(concat_df, df)
 num_cols += ["binary"]
 
-df1 = pd.read_csv("n102_inference/valid.csv")
-df2 = pd.read_csv("n102_inference/test_submission.csv")
+df1 = pd.read_csv(Config.n102_inf+"/valid.csv")
+df2 = pd.read_csv(Config.n102_inf+"/test_submission.csv")
 df = pd.concat([df1, df2]).reset_index(drop=True)
 df.columns = ["ncode", "binary3"]
 concat_df = pd.merge(concat_df, df)
 num_cols += ["binary3"]
 
-df1 = pd.read_csv("n107_inference/valid.csv")
-df2 = pd.read_csv("n107_inference/test_submission.csv")
+df1 = pd.read_csv(Config.n107_inf+"/valid.csv")
+df2 = pd.read_csv(Config.n107_inf+"/test_submission.csv")
 df = pd.concat([df1, df2]).reset_index(drop=True)
 df.columns = ["ncode", "-101rmse"]
 concat_df = pd.merge(concat_df, df)

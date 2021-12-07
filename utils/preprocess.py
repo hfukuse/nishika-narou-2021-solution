@@ -6,7 +6,7 @@ def remove_url(sentence):
     ret = re.sub(r"(http?|ftp)(:\/\/[-_\.!~*\'()a-zA-Z0-9;\/?:\@&=\+$,%#]+)", "", sentence)
     return ret
 
-def processing_ncode(input_df: pd.DataFrame):
+def processing_ncode(input_df: pd.DataFrame):#引用:https://www.nishika.com/competitions/21/topics/164
     output_df = input_df.copy()
 
     num_dict = {chr(i): i - 65 for i in range(65, 91)}

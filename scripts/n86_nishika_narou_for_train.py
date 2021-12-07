@@ -343,16 +343,30 @@ for i in range(5):
     train_x.shape
 
     SEED = 0
-    model = cb.CatBoostRegressor()
-    model.load_model(Config.model_dir + f'/best_model_{i}')
+    params = {
+        "random_state": 420,
+        "num_boost_round": 50000,
+        "early_stopping_rounds": 150,
+        "task_type": "CPU",
+        "use_best_model": True
+
+    }
+    model = cb.CatBoostRegressor(**params)
 
     train_data = cb.Pool(train_x, train_y, cat_features=cat_cols)
     val_data = cb.Pool(val_x, val_y, cat_features=cat_cols)
+    model = model.fit(
+        train_data,
+        eval_set=val_data,
+        early_stopping_rounds=150,
+        verbose=100
+    )
 
     val_pred = model.predict(val_x)
     test_pred =model.predict(test_x)
     all_preds.append(test_pred)
     all_val_preds+=list(val_pred)
+    model.save_model(Config.model_dir+f'best_model_{i}')
 
 len(all_val_preds)
 

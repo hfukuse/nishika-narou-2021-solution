@@ -7,7 +7,7 @@
  "train_dir" : "./data/processed/train_val_split",
  "dataset_dir" : "../input/data/nishika-narou",
  "model_name" : "cl-tohoku/bert-base-japanese-v2",
- "pretrained_model_path" : "cl-tohoku/bert-base-japanese-v2",
+ "pretrained_model_path" : "./models/bert-base-japanese",
  "pos_dir" : "./data/processed/nishika-narou-train-with-pos",
  "batch_size" : 8,
  "epochs" : 3,
@@ -24,5 +24,5 @@
  "n95_01" : { "output_dir" : "./data/output/n95_01_inference","model_dir" : "n95_rmse01_model"},
  "n102" : { "output_dir" : "./data/output/n102_inference","model_dir" : "n102_model"},
  "n107" : { "output_dir" : "./data/output/n107_inference","model_dir" : "n107_model"},
- "n117" : { "output_dir" : "./data/output/n117_inference","model_dir" : "n117_model"}
+ "n117" : { "output_dir" : "./data/output/n117_inference","model_dir" : "n117_model"},
 }
