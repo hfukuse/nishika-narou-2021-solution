@@ -9,6 +9,7 @@ import re
 import sklearn.preprocessing as sp
 import json
 import sys
+import argparse
 sys.path.append("./nishika-narou-2021-1st-place-solution")
 
 from utils.preprocess import remove_url,processing_ncode,count_keyword,count_nn_story,count_n_story
