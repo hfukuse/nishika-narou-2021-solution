@@ -16,13 +16,14 @@ def convert_examples_to_features(text, tokenizer, max_len=256):
     return tok
 
 class NishikaNarouDataset(Dataset):
-    def __init__(self, data, tokenizer, is_test=False):
+    def __init__(self, data, tokenizer, Config, is_test=False):
         self.data = data
         self.excerpts = self.data.excerpt.tolist()
         if not is_test:
             self.targets = self.data.target.tolist()
         self.tokenizer = tokenizer
         self.is_test = is_test
+        self.Config=Config
 
     def __len__(self):
         return len(self.data)
@@ -32,7 +33,7 @@ class NishikaNarouDataset(Dataset):
             excerpt = self.excerpts[item]
             label = self.targets[item]
             features = convert_examples_to_features(
-                excerpt, self.tokenizer, Config.max_len
+                excerpt, self.tokenizer, self.Config.max_len
             )
             return {
                 'input_ids': torch.tensor(features['input_ids'], dtype=torch.long),
