@@ -71,14 +71,14 @@ if debug:
     Config.max_len = 5
     Config.eval_schedule = [(float("inf"), 500), (0, 500)]
 
-sys.path.append(Config.narou_dir)
+sys.path.append(Config.narou_dir+"/utils")
 
-from utils.preprocess import remove_url
-from utils.model import NarouModel
-from utils.dataset import NishikaNarouDataset
-from utils.Trainer import DynamicPadCollate,Trainer
-from utils.optimizer import create_optimizer
-from utils.utils import seed_everything
+from preprocess import remove_url
+from model import NarouModel
+from dataset import NishikaNarouDataset
+from Trainer import AvgCounter,EvaluationScheduler,DynamicPadCollate,Trainer
+from optimizer import create_optimizer
+from utils import seed_everything
 
 def make_dataloader(data, tokenizer, is_train=True):
     dataset = NishikaNarouDataset(data, tokenizer=tokenizer, max_len=Config.max_len)

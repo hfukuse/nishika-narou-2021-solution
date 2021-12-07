@@ -44,9 +44,8 @@ class Config:
     i42_inf=js["i42"]["output_dir"]
     i43_inf=js["i43"]["output_dir"]
 
-sys.path.append(Config.narou_dir)
-sys.path.append(os.path.basename(__file__)+"/..")
-from utils.preprocess import remove_url,processing_ncode,count_keyword,count_nn_story,count_n_story
+sys.path.append(Config.narou_dir+"/utils")
+from preprocess import remove_url,processing_ncode,count_keyword,count_nn_story,count_n_story
 
 os.system('pip install transformers fugashi ipadic unidic_lite --quiet')
 os.system('mkdir -p ' + Config.output_dir)

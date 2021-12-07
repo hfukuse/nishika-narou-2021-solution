@@ -47,9 +47,9 @@ class Config:
     n117_inf=js["n117"]["output_dir"]
 
 
-sys.path.append(Config.narou_dir)
+sys.path.append(Config.narou_dir+"/utils")
 
-from utils.preprocess import remove_url,processing_ncode,count_keyword,count_nn_story,count_n_story
+from preprocess import remove_url,processing_ncode,count_keyword,count_nn_story,count_n_story
 
 #作れる#with posはtrain_val_split dirへの統合はありかも
 train_df = pd.read_csv(Config.train_dir+'/kfold_2021_06.csv')
