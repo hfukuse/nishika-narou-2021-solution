@@ -7,7 +7,7 @@
  "train_dir" : "./data/processed/train_val_split",
  "dataset_dir" : "../input/data/nishika-narou",
  "model_name" : "cl-tohoku/bert-base-japanese-v2",
- "pretrained_model_path" : "./models/bert-base-japanese",
+ "pretrained_model_path" : "../input/all-model-nishika-narou",
  "pos_dir" : "./data/processed/nishika-narou-train-with-pos",
  "batch_size" : 8,
  "epochs" : 3,

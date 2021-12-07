@@ -1,5 +1,7 @@
 NAROU_DIR=./nishika-narou-2021-1st-place-solution
 
+cd NAROU_DIR
+
 #i8_inferenceを作成
 python ${NAROU_DIR}/scripts_for_kaggle/i8_nishika_narou_for_inference_title.py
 #i9_inferenceを作成

@@ -1,3 +1,5 @@
+cd ./nishika-narou-2021-1st-place-solution
+
 SCRIPT_DIR=./nishika-narou-2021-1st-place-solution/scripts
 
 #i8_modelを作成
