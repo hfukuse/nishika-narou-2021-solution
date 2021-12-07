@@ -1,5 +1,8 @@
 SCRIPT_DIR=./nishika-narou-2021-1st-place-solution/scripts
 
+#pretrain_modelを作成
+python ${SCRIPT_DIR}/pretrain.py
+
 #i8_modelを作成
 python ${SCRIPT_DIR}/n8_nishika_narou_for_train.py
 #i9_modelを作成
