@@ -26,12 +26,13 @@ git clone https://github.com/hfukuse/nishika-narou-2021-1st-place-solution.git
 
 ## 学習済みモデルを使用して予測のみ行う場合  
 学習済みモデルを./nishika-narou-2021-1st-place-solution/modelsに設置してください。  
-```modelのダウンロード
+(modelのダウンロード)  
+```
 pip install gdown
 sh ./nishika-narou-2021-1st-place-solution/models/get_model.sh
 ```  
-  
-```予測
+(予測)  
+```
 sh ./nishika-narou-2021-1st-place-solution/run_inference_using_trained_models.sh
 ```
   
