@@ -1,11 +1,6 @@
-import numpy as np
-import pandas as pd
-
-from torch.utils.data import Dataset, DataLoader
-
 import torch
-import torch.nn as nn
-import re
+from torch.utils.data import Dataset
+
 
 def convert_examples_to_features(text, tokenizer, max_len=256):
     tok = tokenizer.encode_plus(
@@ -15,6 +10,7 @@ def convert_examples_to_features(text, tokenizer, max_len=256):
         padding='max_length')
     return tok
 
+
 class NishikaNarouDataset(Dataset):
     def __init__(self, data, tokenizer, Config, is_test=False):
         self.data = data
@@ -23,7 +19,7 @@ class NishikaNarouDataset(Dataset):
             self.targets = self.data.target.tolist()
         self.tokenizer = tokenizer
         self.is_test = is_test
-        self.Config=Config
+        self.Config = Config
 
     def __len__(self):
         return len(self.data)
@@ -43,7 +39,7 @@ class NishikaNarouDataset(Dataset):
         else:
             excerpt = self.excerpts[item]
             features = convert_examples_to_features(
-                excerpt, self.tokenizer, Config.max_len
+                excerpt, self.tokenizer, self.Config.max_len
             )
             return {
                 'input_ids': torch.tensor(features['input_ids'], dtype=torch.long),
