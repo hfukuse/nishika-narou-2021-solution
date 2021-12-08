@@ -26,12 +26,14 @@ git clone https://github.com/hfukuse/nishika-narou-2021-1st-place-solution.git
 
 ## 学習済みモデルを使用して予測のみ行う場合  
 学習済みモデルを./nishika-narou-2021-1st-place-solution/modelsに設置してください。  
-(modelのダウンロード 合計12GBほど)  
+  
+(modelのダウンロード)合計12GBほど  
 ```
 pip install gdown
 sh ./nishika-narou-2021-1st-place-solution/models/get_model.sh
 ```  
-kaggle notebookのoutputファイルの最大容量は19GBほどで,オーバーしてしまうので、一度models.zipをダウンロードして専用のnotebookを作成するかdatasetを作成するなどの工夫が必要となります。  
+kaggle notebookのoutputファイルの最大容量は19GBほどで,ダウンロードと展開を一つのnotebookでやると容量をオーバーしてしまうので、一度models.zipをダウンロードして専用のnotebookを作成するか、あるいはdatasetを作成するなどの工夫が必要となります。  
+  
 (予測)  
 ```
 sh ./nishika-narou-2021-1st-place-solution/run_inference_using_trained_models.sh
