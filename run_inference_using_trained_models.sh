@@ -8,13 +8,13 @@ SCRIPT_DIR=./nishika-narou-2021-1st-place-solution/scripts
 sh ${SCRIPT_DIR}/preprocess.sh
 
 #bertによる予測
-sh ${SCRIPT_DIR}/predict_bert.py
+sh ${SCRIPT_DIR}/predict_bert.sh
 
 #catboostによる予測
-sh ${SCRIPT_DIR}/predict_catboost.py
+sh ${SCRIPT_DIR}/predict_catboost.sh
 
 #アンサンブルするmodel1による予測
-sh ${SCRIPT_DIR}/predict_model1.py
+sh ${SCRIPT_DIR}/predict_model1.sh
 
 #アンサンブルするmodel2による予測
-sh ${SCRIPT_DIR}/predict_model2.py
+sh ${SCRIPT_DIR}/predict_model2.sh
