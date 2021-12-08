@@ -3,7 +3,7 @@
 https://www.nishika.com/competitions/21/summary  
 
 # Approach  
-![スクリーンショット 2021-12-08 13 39 57](https://user-images.githubusercontent.com/61064493/145149949-e105ff33-a635-4ea4-b198-aee2ac775e67.png)  
+![スクリーンショット 2021-12-08 13 39 57](https://user-images.githubusercontent.com/61064493/145149949-e105ff33-a635-4ea4-b198-aee2ac775e67.png)
 ※modelは全て5fold
 # Input Data  
 ```
@@ -25,7 +25,7 @@ git clone https://github.com/hfukuse/nishika-narou-2021-1st-place-solution.git
 (※zipファイルを用いる場合はここより下の手順はnishika-narou-2021-1st-place-solutionフォルダーの一つ上の階層で実行してください。)
 
 ## 学習済みモデルを使用して予測のみ行う場合  
-事前に学習済みモデルを./nishika-narou-2021-1st-place-solution/modelに設置してください。
+事前に学習済みモデルを./nishika-narou-2021-1st-place-solution/modelsに設置してください。
 ```bash
 sh ./nishika-narou-2021-1st-place-solution/run_inference_using_trained_models.sh
 ```
