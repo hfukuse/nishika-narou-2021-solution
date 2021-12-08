@@ -24,6 +24,7 @@ git clone https://github.com/hfukuse/nishika-narou-2021-1st-place-solution.git
 (※zipファイルを用いる場合はここより下の手順はnishika-narou-2021-1st-place-solutionフォルダーの一つ上の階層で実行してください。)
 
 ## 学習済みモデルを使用して予測のみ行う場合  
+事前に学習済みモデルを./nishika-narou-2021-1st-place-solution/modelに設置してください。
 ```bash
 sh ./nishika-narou-2021-1st-place-solution/run_inference_using_trained_models.sh
 ```
