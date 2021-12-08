@@ -167,7 +167,7 @@ models_preds = []
 all_val_pre_df = pd.DataFrame()
 for model_num in range(n_models):
     print(f'Inference#{model_num + 1}/{n_models}')
-    test_ds = NishikaNarouDataset(data=test_df[test_df['fold'] == model_num], tokenizer=tokenizer, is_test=True)
+    test_ds = NishikaNarouDataset(data=test_df[test_df['fold'] == model_num], tokenizer=tokenizer, Config=Config,is_test=True)
     test_sampler = SequentialSampler(test_ds)
     test_dataloader = DataLoader(test_ds, sampler=test_sampler, batch_size=Config.batch_size)
 
