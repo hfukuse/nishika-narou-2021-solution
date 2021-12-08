@@ -3,7 +3,8 @@
 https://www.nishika.com/competitions/21/summary  
 
 # Approach  
-![スクリーンショット 2021-12-08 13 39 57](https://user-images.githubusercontent.com/61064493/145149949-e105ff33-a635-4ea4-b198-aee2ac775e67.png)
+![スクリーンショット 2021-12-08 13 39 57](https://user-images.githubusercontent.com/61064493/145149949-e105ff33-a635-4ea4-b198-aee2ac775e67.png)  
+※modelは全て5fold
 # Input Data  
 ```
 data
@@ -43,7 +44,13 @@ seed:42
 新たにmodelの訓練を行って作成する場合、元々modelsフォルダーに存在するmodelを上書きするので注意してください。  
   
 # 参考  
-CLRP-Pretrain  
+1)CLRP-Pretrain  
 https://www.kaggle.com/chamecall/clrp-pretrain  
-CLRP-Finetune(roberta-large)  
+2)CLRP-Finetune(roberta-large)  
 https://www.kaggle.com/chamecall/clrp-finetune-roberta-large  
+3)小説家になろう  
+https://syosetu.com/  
+4)Kaggle-PANDA-1st-place-solution  
+https://github.com/kentaroy47/Kaggle-PANDA-1st-place-solution  
+5)Nishika 財務・非財務情報を活用した株主価値予測 2位ソースコード  
+https://github.com/upura/nishika-yuho  
