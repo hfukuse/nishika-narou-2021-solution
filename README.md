@@ -34,10 +34,16 @@ sh ./nishika-narou-2021-1st-place-solution/run_inference_using_trained_models.sh
 sh ./nishika-narou-2021-1st-place-solution/run.sh
 ```
   
-## その他(環境や注意事項)
+# その他(環境や注意事項)
 OS:Ubuntu 20.04.3    
 2 CPU cores  
 NVIDIA TESLA P100 GPU × 1 (13 GB of RAM)  
 (kaggle notebook環境で動作確認済みです。localで行う場合はkaggle notebook環境に準じた環境で動かしてください。)  
 seed:42  
 新たにmodelの訓練を行って作成する場合、元々modelsフォルダーに存在するmodelを上書きするので注意してください。  
+  
+# 参考  
+CLRP-Pretrain  
+https://www.kaggle.com/chamecall/clrp-pretrain  
+CLRP-Finetune(roberta-large)  
+https://www.kaggle.com/chamecall/clrp-finetune-roberta-large  
