@@ -34,6 +34,7 @@ class Config:
     output_dir = "."
     model_dir = js["models_dir"]
     narou_dir = js["narou_dir"]
+    result_dir = js["result_dir"]
     i8_inf = js["i8"]["output_dir"]
     i9_inf = js["i9"]["output_dir"]
     i18_inf = js["i18"]["output_dir"]
@@ -339,4 +340,4 @@ print(np.mean(np.array(acc)))
 all_preds = np.array(all_preds)
 m_preds = all_preds.mean(0)
 sub_df.iloc[:, 1:] = m_preds
-sub_df.to_csv('test_submission.csv', index=False)
+sub_df.to_csv(Config.result_dir+'/test_submission.csv', index=False)

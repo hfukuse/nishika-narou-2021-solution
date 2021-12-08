@@ -337,8 +337,6 @@ concat_df = pd.merge(concat_df, df)
 num_cols += ["-101rmse"]
 
 concat_df = concat_df.drop_duplicates().reset_index(drop=True)
-
-import sklearn.preprocessing as sp
 enc = sp.OneHotEncoder(categories='auto', sparse=False)
 enc.set_params( categories=[[0,1,2,3,4]] )
 

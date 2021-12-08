@@ -13,6 +13,7 @@
  "epochs" : 3,
  "models_dir" : "./nishika-narou-2021-1st-place-solution/models",
  "narou_dir" : "./nishika-narou-2021-1st-place-solution",
+ "result_dir" : "./nishika-narou-2021-1st-place-solution/data/output",
  "i8" : {"item_num" : 1, "output_dir" : "./nishika-narou-2021-1st-place-solution/data/output/i8_inference", "model_dir" : "n8_model", "max_len" : 256},
  "i9" : { "item_num" : 0, "output_dir" : "./nishika-narou-2021-1st-place-solution/data/output/i9_inference","model_dir" : "n9_model", "max_len" : 256},
  "i18" : { "item_num" : 2, "output_dir" : "./nishika-narou-2021-1st-place-solution/data/output/i18_inference","model_dir" : "n18_model", "max_len" : 256},
