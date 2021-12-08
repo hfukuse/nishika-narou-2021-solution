@@ -3,7 +3,7 @@ SCRIPT_DIR=./nishika-narou-2021-1st-place-solution/scripts
 #pretrain_modelを作成
 python ${SCRIPT_DIR}/train/pretrain.py --debug
 
-#create bert
+#create bert feature
 #i8_modelを作成
 python ${SCRIPT_DIR}/train/n8_nishika_narou_for_train.py --debug
 #i9_modelを作成
@@ -30,7 +30,7 @@ python ${SCRIPT_DIR}/inference/i42_nishika_narou_for_inference.py
 python ${SCRIPT_DIR}/inference/i43_nishika_narou_keyword_for_inference.py
 
 
-#create catboost
+#create catboost feature
 #n86_modelを作成
 python ${SCRIPT_DIR}/train/n86_nishika_narou_for_train.py --debug
 #n95_modelを作成
