@@ -61,7 +61,7 @@ sub_df = pd.read_csv(Config.dataset_dir + '/sample_submission.csv')
 
 test_df["fold"] = 6
 
-concat_df = pd.read_csv("concat_df.csv")
+concat_df = pd.read_csv(Config.train_dir + "/concat_df.csv")
 
 cat_cols = ['writer', 'biggenre', 'genre', 'novel_type', 'isr15', 'isbl', 'isgl', 'iszankoku', "tenni_tennsei",
             'pc_or_k'] + ["ざまあ"]

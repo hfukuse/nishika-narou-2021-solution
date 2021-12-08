@@ -15,17 +15,3 @@ python ${SCRIPT_DIR}/train/n41_nishika_narou_for_train.py
 python ${SCRIPT_DIR}/train/n42_nishika_narou_for_train.py
 #i43_modelを作成
 python ${SCRIPT_DIR}/train/n43_nishika_narou_for_train.py
-
-
-#n86_modelを作成
-python ${SCRIPT_DIR}/train/n86_nishika_narou_for_train.py
-#n95_modelを作成
-python ${SCRIPT_DIR}/train/n95_nishika_narou_for_train.py
-#n95_01_modelを作成
-python ${SCRIPT_DIR}/train/n95_nishika_narou_01_for_train.py
-#n102_modelを作成
-python ${SCRIPT_DIR}/train/n102_nishika_narou_for_train.py
-#n107_modelを作成
-python ${SCRIPT_DIR}/train/n107_nishika_narou_for_train.py
-#n117_modelを作成
-python ${SCRIPT_DIR}/train/n117_nishika_narou_for_train.py

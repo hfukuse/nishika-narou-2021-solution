@@ -125,5 +125,5 @@ raw_df["sum_fav"] = raw_df["sum_fav"].fillna(0)
 
 concat_df = pd.concat([raw_df, tags_df], axis=1)
 
-concat_df.to_csv("concat_df.csv", index=False)
+concat_df.to_csv(Config.train_dir + "/concat_df.csv", index=False)
 
