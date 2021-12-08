@@ -31,6 +31,7 @@ git clone https://github.com/hfukuse/nishika-narou-2021-1st-place-solution.git
 pip install gdown
 sh ./nishika-narou-2021-1st-place-solution/models/get_model.sh
 ```  
+kaggle notebookのoutputファイルの最大容量は19GBほどで,オーバーしてしまうので、一度models.zipをダウンロードして専用のnotebookを作成するかdatasetを作成するなどの工夫が必要となります。  
 (予測)  
 ```
 sh ./nishika-narou-2021-1st-place-solution/run_inference_using_trained_models.sh
