@@ -6,7 +6,7 @@ https://www.nishika.com/competitions/21/summary
 精度を測定するために2021年8月以降の作品のブックマークをbin化されたものに対して予測を行いました。  
   
 # Approach  
-![スクリーンショット 2021-12-08 13 39 57](https://user-images.githubusercontent.com/61064493/145149949-e105ff33-a635-4ea4-b198-aee2ac775e67.png)
+![スクリーンショット 2021-12-08 13 39 57](https://user-images.githubusercontent.com/61064493/145149949-e105ff33-a635-4ea4-b198-aee2ac775e67.png)　　
 ※modelは全て5fold
 # Input Data  
 ```
