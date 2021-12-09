@@ -1,4 +1,5 @@
 import re
+
 import pandas as pd
 
 
@@ -6,7 +7,8 @@ def remove_url(sentence):
     ret = re.sub(r"(http?|ftp)(:\/\/[-_\.!~*\'()a-zA-Z0-9;\/?:\@&=\+$,%#]+)", "", str(sentence))
     return ret
 
-def processing_ncode(input_df: pd.DataFrame):#引用:https://www.nishika.com/competitions/21/topics/164
+
+def processing_ncode(input_df: pd.DataFrame):  # 引用:https://www.nishika.com/competitions/21/topics/164
     output_df = input_df.copy()
 
     num_dict = {chr(i): i - 65 for i in range(65, 91)}
@@ -27,11 +29,14 @@ def processing_ncode(input_df: pd.DataFrame):#引用:https://www.nishika.com/com
     output_df['ncode_num'] = tmp_df['_ncode_num'] + tmp_df['_ncode_chr2num']
     return output_df
 
+
 def count_keyword(x):
     return x.keyword.count(" ")
 
+
 def count_nn_story(x):
     return x.story.count("\n\n")
+
 
 def count_n_story(x):
     return x.story.count("\n")

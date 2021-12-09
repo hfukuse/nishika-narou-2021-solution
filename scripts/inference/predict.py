@@ -51,7 +51,7 @@ class Config:
 
 sys.path.append(Config.narou_dir + "/utils")
 
-from preprocess import remove_url, processing_ncode, count_keyword, count_nn_story, count_n_story
+from preprocess import processing_ncode, count_keyword, count_nn_story, count_n_story
 
 # 作れる#with posはtrain_val_split dirへの統合はありかも
 train_df = pd.read_csv(Config.train_dir + '/kfold_2021_06.csv')
@@ -340,4 +340,4 @@ print(np.mean(np.array(acc)))
 all_preds = np.array(all_preds)
 m_preds = all_preds.mean(0)
 sub_df.iloc[:, 1:] = m_preds
-sub_df.to_csv(Config.result_dir+'/test_submission.csv', index=False)
+sub_df.to_csv(Config.result_dir + '/test_submission.csv', index=False)

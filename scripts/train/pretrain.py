@@ -1,14 +1,13 @@
+import argparse
+import json
+import os
 import warnings
 
 import pandas as pd
-import re
-import os
-import argparse
-from transformers import (AutoModel, AutoModelForMaskedLM,
+from transformers import (AutoModelForMaskedLM,
                           AutoTokenizer, LineByLineTextDataset,
                           DataCollatorForLanguageModeling,
                           Trainer, TrainingArguments)
-import json
 
 warnings.filterwarnings('ignore')
 os.system('pip install transformers fugashi ipadic unidic_lite --quiet')
@@ -21,6 +20,7 @@ def make_parse():
     arg("--settings", default="./nishika-narou-2021-solution/settings.json", type=str, help="settings path")
     arg("--is_test", action="store_true", help="test")
     return parser
+
 
 args = make_parse().parse_args()
 

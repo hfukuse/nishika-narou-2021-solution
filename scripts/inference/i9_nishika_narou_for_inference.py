@@ -1,15 +1,15 @@
+import argparse
 import os
 import warnings
-import argparse
 
 import numpy as np
 import pandas as pd
 
 warnings.filterwarnings('ignore')
 
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import DataLoader
 from torch.utils.data import SequentialSampler
-from transformers import AutoModel, AutoTokenizer, get_cosine_schedule_with_warmup, AutoConfig, AdamW
+from transformers import AutoModel, AutoTokenizer, AutoConfig
 
 import matplotlib.pyplot as plt
 
@@ -18,14 +18,10 @@ from colorama import Fore, Back, Style
 from sklearn.metrics import log_loss
 
 import torch
-import torch.nn as nn
-import re
 import json
 import sys
 
-
 from scipy.special import softmax
-
 
 r_ = Fore.RED
 b_ = Fore.BLUE
@@ -50,6 +46,7 @@ args = make_parse().parse_args()
 with open(args.settings) as f:
     js = json.load(f)
 
+
 class Config:
     model_name = js["model_name"]
     output_hidden_states = js["output_hidden_states"]
@@ -59,11 +56,12 @@ class Config:
     train_dir = js["train_dir"]
     item = js["item"]
     dataset_dir = js["dataset_dir"]
-    item_num = js["i9"]["item_num"] # 0ならstory(あらすじ),1ならtitle(題名),2ならkeyword(タグ)
+    item_num = js["i9"]["item_num"]  # 0ならstory(あらすじ),1ならtitle(題名),2ならkeyword(タグ)
     output_dir = js["i9"]["output_dir"]
     max_len = js["i9"]["max_len"]
-    model_dir = js["models_dir"]+"/"+js["i9"]["model_dir"]
+    model_dir = js["models_dir"] + "/" + js["i9"]["model_dir"]
     narou_dir = js["narou_dir"]
+
 
 sys.path.append(Config.narou_dir)
 
@@ -73,7 +71,6 @@ from utils.dataset import NishikaNarouDataset
 
 os.system('pip install transformers fugashi ipadic unidic_lite --quiet')
 os.system('mkdir -p ' + Config.output_dir)
-
 
 test_df = pd.read_csv(Config.dataset_dir + '/test.csv')
 test_df.head()
@@ -102,7 +99,7 @@ n_models = 5
 
 for model_num in range(n_models):
     print(f'Inference#{model_num + 1}/{n_models}')
-    test_ds = NishikaNarouDataset(data=test_df, tokenizer=tokenizer, Config=Config,is_test=True)
+    test_ds = NishikaNarouDataset(data=test_df, tokenizer=tokenizer, Config=Config, is_test=True)
     test_sampler = SequentialSampler(test_ds)
     test_dataloader = DataLoader(test_ds, sampler=test_sampler, batch_size=Config.batch_size)
 
@@ -167,7 +164,8 @@ models_preds = []
 all_val_pre_df = pd.DataFrame()
 for model_num in range(n_models):
     print(f'Inference#{model_num + 1}/{n_models}')
-    test_ds = NishikaNarouDataset(data=test_df[test_df['fold'] == model_num], tokenizer=tokenizer, Config=Config,is_test=True)
+    test_ds = NishikaNarouDataset(data=test_df[test_df['fold'] == model_num], tokenizer=tokenizer, Config=Config,
+                                  is_test=True)
     test_sampler = SequentialSampler(test_ds)
     test_dataloader = DataLoader(test_ds, sampler=test_sampler, batch_size=Config.batch_size)
 
@@ -189,7 +187,6 @@ for model_num in range(n_models):
     y_true = np.array(test_df['target'][test_df['fold'] == model_num])
     all_preds = np.array(all_preds)
     score.append(loss_fn(y_true, all_preds))
-
 
     val_pre_df = pd.concat(
         [test_df[test_df['fold'] == model_num].ncode.reset_index(drop=True), pd.DataFrame(all_preds)], axis=1)
@@ -221,7 +218,7 @@ models_preds = []
 all_val_pre_df = pd.DataFrame()
 for model_num in range(n_models):
     print(f'Inference#{model_num + 1}/{n_models}')
-    test_ds = NishikaNarouDataset(data=test_df, tokenizer=tokenizer, Config=Config,is_test=True)
+    test_ds = NishikaNarouDataset(data=test_df, tokenizer=tokenizer, Config=Config, is_test=True)
     test_sampler = SequentialSampler(test_ds)
     test_dataloader = DataLoader(test_ds, sampler=test_sampler, batch_size=Config.batch_size)
 

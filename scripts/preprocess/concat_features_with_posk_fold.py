@@ -1,14 +1,8 @@
-import datetime
-import os
-import re
+import argparse
+import json
 
 import numpy as np
 import pandas as pd
-import tqdm
-import argparse
-import json
-import sys
-
 
 
 def make_parse():
@@ -17,15 +11,18 @@ def make_parse():
     arg("--settings", default="./nishika-narou-2021-solution/settings.json", type=str, help="settings path")
     return parser
 
+
 args = make_parse().parse_args()
 
 with open(args.settings) as f:
     js = json.load(f)
 
+
 class Config:
     train_dir = js["train_dir"]
     dataset_dir = js["dataset_dir"]
     pos_dir = js["pos_dir"]
+
 
 train_df = pd.read_csv(Config.train_dir + '/kfold_2021_06.csv')
 train2_df = pd.read_csv(Config.train_dir + '/kfold_from_2020_to_2021_06.csv')
@@ -126,4 +123,3 @@ raw_df["sum_fav"] = raw_df["sum_fav"].fillna(0)
 concat_df = pd.concat([raw_df, tags_df], axis=1)
 
 concat_df.to_csv(Config.train_dir + "/concat_df.csv", index=False)
-

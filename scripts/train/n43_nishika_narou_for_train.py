@@ -1,11 +1,11 @@
-import os
-import warnings
-import sys
+import argparse
 import json
+import os
+import sys
+import warnings
 
 import numpy as np
 import pandas as pd
-import argparse
 
 warnings.filterwarnings("ignore")
 
@@ -14,7 +14,7 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 from torch.utils.data import RandomSampler, SequentialSampler
 from transformers import AutoModel, AutoTokenizer, get_cosine_schedule_with_warmup, AutoConfig
-from torch.cuda.amp import autocast, GradScaler
+from torch.cuda.amp import GradScaler
 import matplotlib.pyplot as plt
 
 plt.style.use("seaborn-talk")
@@ -29,21 +29,22 @@ bb_ = Back.BLACK
 sr_ = Style.RESET_ALL
 
 
-
 def make_parse():
     parser = argparse.ArgumentParser()
     arg = parser.add_argument
-    arg("--debug",default=False ,action="store_true", help="debug")
+    arg("--debug", default=False, action="store_true", help="debug")
     arg("--settings", default="./nishika-narou-2021-solution/settings.json", type=str, help="settings path")
     arg("--is_test", action="store_true", help="test")
     return parser
+
 
 args = make_parse().parse_args()
 
 with open(args.settings) as f:
     js = json.load(f)
 
-debug=args.debug
+debug = args.debug
+
 
 class Config:
     model_name = js["model_name"]
@@ -55,10 +56,10 @@ class Config:
     train_dir = js["train_dir"]
     item = js["item"]
     dataset_dir = js["dataset_dir"]
-    item_num = js["i43"]["item_num"] # 0ならstory(あらすじ),1ならtitle(題名),2ならkeyword(タグ)
+    item_num = js["i43"]["item_num"]  # 0ならstory(あらすじ),1ならtitle(題名),2ならkeyword(タグ)
     output_dir = js["i43"]["output_dir"]
     max_len = js["i43"]["max_len"]
-    model_dir = js["models_dir"]+"/"+js["i8"]["model_dir"]
+    model_dir = js["models_dir"] + "/" + js["i8"]["model_dir"]
     narou_dir = js["narou_dir"]
     epochs = js["epochs"]
     max_len = 256
@@ -66,19 +67,22 @@ class Config:
     wd = 0.01
     eval_schedule = [(float("inf"), 40), (0.85, 30), (0.80, 20), (0.70, 10), (0, 0)]
     gradient_accumulation = 2
+
+
 if debug:
     Config.epochs = 1
     Config.max_len = 5
-    Config.eval_schedule = [(float("inf"), 500),(0, 500)]
+    Config.eval_schedule = [(float("inf"), 500), (0, 500)]
 
-sys.path.append(Config.narou_dir+"/utils")
+sys.path.append(Config.narou_dir + "/utils")
 
 from preprocess import remove_url
 from model import NarouModel
 from dataset import NishikaNarouDataset
-from Trainer import AvgCounter,EvaluationScheduler,DynamicPadCollate,Trainer
+from Trainer import DynamicPadCollate, Trainer
 from optimizer import create_optimizer
 from utils import seed_everything
+
 
 def make_dataloader(data, tokenizer, is_train=True):
     dataset = NishikaNarouDataset(data, tokenizer=tokenizer, Config=Config)
@@ -94,6 +98,7 @@ def make_dataloader(data, tokenizer, is_train=True):
 
 def loss_fn(y_true, y_pred):
     return nn.functional.cross_entropy(y_true, y_pred.to(torch.long))
+
 
 def main():
     os.system("pip install transformers fugashi ipadic unidic_lite --quiet")
@@ -151,6 +156,7 @@ def main():
 
     print("Best val losses:", best_scores)
     print("Avg val loss:", np.array(best_scores).mean())
+
 
 if __name__ == "__main__":
     main()

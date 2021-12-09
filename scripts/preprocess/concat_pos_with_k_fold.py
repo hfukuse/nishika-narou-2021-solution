@@ -1,18 +1,16 @@
+import argparse
 import datetime
+import json
 import os
 import re
-import argparse
 
 import numpy as np
 import pandas as pd
-import tqdm
-import json
-import sys
-
 
 os.system('pip install xfeat --quiet')
 
 from xfeat import Pipeline, SelectCategorical, LabelEncoder
+
 
 def make_parse():
     parser = argparse.ArgumentParser()
@@ -20,10 +18,12 @@ def make_parse():
     arg("--settings", default="./nishika-narou-2021-solution/settings.json", type=str, help="settings path")
     return parser
 
+
 args = make_parse().parse_args()
 
 with open(args.settings) as f:
     js = json.load(f)
+
 
 class Config:
     train_dir = js["train_dir"]
@@ -159,7 +159,6 @@ raw_df = pd.concat([train_df, test_df, train2_df])
 
 raw_df["excerpt"] = raw_df["story"]
 raw_df.story = raw_df.story.replace('\n', '', regex=True)
-
 
 raw_df.story = raw_df.story.map(remove_url)
 

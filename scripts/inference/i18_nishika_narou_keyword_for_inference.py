@@ -1,16 +1,15 @@
+import argparse
 import os
 import warnings
-import argparse
-import sys
 
 import numpy as np
 import pandas as pd
 
 warnings.filterwarnings('ignore')
 
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import DataLoader
 from torch.utils.data import SequentialSampler
-from transformers import AutoModel,AutoTokenizer,get_cosine_schedule_with_warmup, AutoConfig, AdamW
+from transformers import AutoModel, AutoTokenizer, AutoConfig
 
 import matplotlib.pyplot as plt
 
@@ -19,14 +18,10 @@ from colorama import Fore, Back, Style
 from sklearn.metrics import log_loss
 
 import torch
-import torch.nn as nn
-import re
 import json
 import sys
 
-
 from scipy.special import softmax
-
 
 r_ = Fore.RED
 b_ = Fore.BLUE
@@ -35,6 +30,7 @@ y_ = Fore.YELLOW
 w_ = Fore.WHITE
 bb_ = Back.BLACK
 sr_ = Style.RESET_ALL
+
 
 def make_parse():
     parser = argparse.ArgumentParser()
@@ -50,6 +46,7 @@ args = make_parse().parse_args()
 with open(args.settings) as f:
     js = json.load(f)
 
+
 class Config:
     model_name = js["model_name"]
     output_hidden_states = js["output_hidden_states"]
@@ -59,11 +56,12 @@ class Config:
     train_dir = js["train_dir"]
     dataset_dir = js["dataset_dir"]
     item = js["item"]
-    item_num = js["i18"]["item_num"] # 0ならstory(あらすじ),1ならtitle(題名),2ならkeyword(タグ)
+    item_num = js["i18"]["item_num"]  # 0ならstory(あらすじ),1ならtitle(題名),2ならkeyword(タグ)
     output_dir = js["i18"]["output_dir"]
     max_len = js["i18"]["max_len"]
-    model_dir = js["models_dir"]+"/"+js["i18"]["model_dir"]
+    model_dir = js["models_dir"] + "/" + js["i18"]["model_dir"]
     narou_dir = js["narou_dir"]
+
 
 sys.path.append(Config.narou_dir)
 
@@ -84,17 +82,15 @@ test_df.excerpt = test_df.excerpt.replace('\n', '', regex=True)
 test_df.excerpt = test_df.excerpt.map(remove_url)
 
 if Config.item[Config.item_num] == 'keyword':
-    test_df.excerpt = test_df.excerpt.replace(' ', 'で',regex=True)
-
-
+    test_df.excerpt = test_df.excerpt.replace(' ', 'で', regex=True)
 
 tokenizer = AutoTokenizer.from_pretrained(Config.model_name)
 config = AutoConfig.from_pretrained(Config.model_name)
 config.update({
-            "hidden_dropout_prob": 0.0,
-            "layer_norm_eps": 1e-7,
-            "output_hidden_states": True
-            })
+    "hidden_dropout_prob": 0.0,
+    "layer_norm_eps": 1e-7,
+    "output_hidden_states": True
+})
 transformer = AutoModel.from_pretrained(Config.model_name, config=config)
 
 models_preds = []
@@ -102,13 +98,13 @@ n_models = 5
 
 for model_num in range(n_models):
     print(f'Inference#{model_num + 1}/{n_models}')
-    test_ds = NishikaNarouDataset(data=test_df, tokenizer=tokenizer, Config=Config,is_test=True)
+    test_ds = NishikaNarouDataset(data=test_df, tokenizer=tokenizer, Config=Config, is_test=True)
     test_sampler = SequentialSampler(test_ds)
     test_dataloader = DataLoader(test_ds, sampler=test_sampler, batch_size=Config.batch_size)
 
-    model=NarouModel(transformer, config)
-    model.load_state_dict(torch.load(Config.model_dir+f'/best_model_{model_num}.pt'))
-    model=model.to(Config.device)
+    model = NarouModel(transformer, config)
+    model.load_state_dict(torch.load(Config.model_dir + f'/best_model_{model_num}.pt'))
+    model = model.to(Config.device)
 
     all_preds = []
     model.eval()
@@ -141,6 +137,7 @@ if args.is_test:
     print("exit: test_mode")
     sys.exit(0)
 
+
 def loss_fn(y_true, y_pred):
     return log_loss(y_true, softmax(y_pred, axis=1))
 
@@ -157,7 +154,7 @@ test_df.excerpt = test_df.excerpt.replace('\n', '', regex=True)
 test_df.excerpt = test_df.excerpt.map(remove_url)
 
 if Config.item[Config.item_num] == 'keyword':
-    test_df.excerpt = test_df.excerpt.replace(' ', 'で',regex=True)
+    test_df.excerpt = test_df.excerpt.replace(' ', 'で', regex=True)
 
 test_df['target'] = test_df['fav_novel_cnt_bin']
 
@@ -166,13 +163,14 @@ models_preds = []
 all_val_pre_df = pd.DataFrame()
 for model_num in range(n_models):
     print(f'Inference#{model_num + 1}/{n_models}')
-    test_ds = NishikaNarouDataset(data=test_df[test_df['fold'] == model_num], tokenizer=tokenizer, Config=Config,is_test=True)
+    test_ds = NishikaNarouDataset(data=test_df[test_df['fold'] == model_num], tokenizer=tokenizer, Config=Config,
+                                  is_test=True)
     test_sampler = SequentialSampler(test_ds)
     test_dataloader = DataLoader(test_ds, sampler=test_sampler, batch_size=Config.batch_size)
 
-    model=NarouModel(transformer, config)
-    model.load_state_dict(torch.load(Config.model_dir+f'/best_model_{model_num}.pt'))
-    model=model.to(Config.device)
+    model = NarouModel(transformer, config)
+    model.load_state_dict(torch.load(Config.model_dir + f'/best_model_{model_num}.pt'))
+    model = model.to(Config.device)
 
     all_preds = []
     model.eval()
@@ -210,7 +208,7 @@ test_df.excerpt = test_df.excerpt.replace('\n', '', regex=True)
 test_df.excerpt = test_df.excerpt.map(remove_url)
 
 if Config.item[Config.item_num] == 'keyword':
-    test_df.excerpt = test_df.excerpt.replace(' ', 'で',regex=True)
+    test_df.excerpt = test_df.excerpt.replace(' ', 'で', regex=True)
 
 test_df['target'] = test_df['fav_novel_cnt_bin']
 
@@ -219,13 +217,13 @@ models_preds = []
 all_val_pre_df = pd.DataFrame()
 for model_num in range(n_models):
     print(f'Inference#{model_num + 1}/{n_models}')
-    test_ds = NishikaNarouDataset(data=test_df, tokenizer=tokenizer, Config=Config,is_test=True)
+    test_ds = NishikaNarouDataset(data=test_df, tokenizer=tokenizer, Config=Config, is_test=True)
     test_sampler = SequentialSampler(test_ds)
     test_dataloader = DataLoader(test_ds, sampler=test_sampler, batch_size=Config.batch_size)
 
-    model=NarouModel(transformer, config)
-    model.load_state_dict(torch.load(Config.model_dir+f'/best_model_{model_num}.pt'))
-    model=model.to(Config.device)
+    model = NarouModel(transformer, config)
+    model.load_state_dict(torch.load(Config.model_dir + f'/best_model_{model_num}.pt'))
+    model = model.to(Config.device)
 
     all_preds = []
     model.eval()

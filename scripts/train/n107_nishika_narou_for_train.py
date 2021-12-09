@@ -1,14 +1,13 @@
+import argparse
+import json
 import os
+import sys
 
 import catboost as cb
 import numpy as np
 import pandas as pd
-from scipy.stats import logistic
 from scipy.special import softmax
-import re
-import json
-import sys
-import argparse
+
 
 def make_parse():
     parser = argparse.ArgumentParser()
@@ -18,10 +17,12 @@ def make_parse():
     arg("--is_test", action="store_true", help="test")
     return parser
 
+
 args = make_parse().parse_args()
 
 with open(args.settings) as f:
     js = json.load(f)
+
 
 class Config:
     model_name = js["model_name"]
@@ -34,18 +35,18 @@ class Config:
     dataset_dir = js["dataset_dir"]
     pos_dir = js["pos_dir"]
     output_dir = js["n107"]["output_dir"]
-    model_dir = js["models_dir"]+"/"+js["n107"]["model_dir"]
+    model_dir = js["models_dir"] + "/" + js["n107"]["model_dir"]
     narou_dir = js["narou_dir"]
-    i8_inf=js["i8"]["output_dir"]
-    i9_inf=js["i9"]["output_dir"]
-    i18_inf=js["i18"]["output_dir"]
-    i41_inf=js["i41"]["output_dir"]
-    i42_inf=js["i42"]["output_dir"]
-    i43_inf=js["i43"]["output_dir"]
+    i8_inf = js["i8"]["output_dir"]
+    i9_inf = js["i9"]["output_dir"]
+    i18_inf = js["i18"]["output_dir"]
+    i41_inf = js["i41"]["output_dir"]
+    i42_inf = js["i42"]["output_dir"]
+    i43_inf = js["i43"]["output_dir"]
 
 
-sys.path.append(Config.narou_dir+"/utils")
-from preprocess import remove_url,processing_ncode,count_keyword,count_nn_story,count_n_story
+sys.path.append(Config.narou_dir + "/utils")
+from preprocess import remove_url, processing_ncode, count_keyword, count_nn_story, count_n_story
 
 os.system('pip install transformers fugashi ipadic unidic_lite --quiet')
 os.system('mkdir -p ' + Config.output_dir)
@@ -112,7 +113,7 @@ def create_story_feature(df):
                 arr += [1]
             else:
                 arr += [0]
-    key_w=["s_ざまあ", "s_ざまぁ", "s_追放", "s_チート", "s_婚約破棄", "s_令嬢", "s_ハーレム"]
+    key_w = ["s_ざまあ", "s_ざまぁ", "s_追放", "s_チート", "s_婚約破棄", "s_令嬢", "s_ハーレム"]
     arr = np.array(arr).reshape(-1, len(key_w))
     return pd.DataFrame(arr, columns=key_w), key_w
 
@@ -194,9 +195,9 @@ feat_cols = cat_cols + num_cols
 ID = 'ncode'
 TARGET = 'fav_novel_cnt_bin'
 
-te_pred = pd.read_csv(Config.i9_inf+"/submission.csv")
-val_pred = pd.read_csv(Config.i9_inf+"/val_pred.csv")
-val2_pred = pd.read_csv(Config.i9_inf+"/kfold_from_2020_to_2021_06_val_pred.csv")
+te_pred = pd.read_csv(Config.i9_inf + "/submission.csv")
+val_pred = pd.read_csv(Config.i9_inf + "/val_pred.csv")
+val2_pred = pd.read_csv(Config.i9_inf + "/kfold_from_2020_to_2021_06_val_pred.csv")
 val_pred.columns = te_pred.columns
 val2_pred.columns = te_pred.columns
 val_pred.iloc[:, 1:] = softmax(np.array(val_pred.iloc[:, 1:]), axis=1)
@@ -208,9 +209,9 @@ feat_cols = cat_cols + num_cols
 
 concat_df = pd.merge(concat_df, bert_df)
 
-te_pred = pd.read_csv(Config.i8_inf+"/submission.csv")
-val_pred = pd.read_csv(Config.i8_inf+"/val_pred.csv")
-val2_pred = pd.read_csv(Config.i8_inf+"/kfold_from_2020_to_2021_06_val_pred.csv")
+te_pred = pd.read_csv(Config.i8_inf + "/submission.csv")
+val_pred = pd.read_csv(Config.i8_inf + "/val_pred.csv")
+val2_pred = pd.read_csv(Config.i8_inf + "/kfold_from_2020_to_2021_06_val_pred.csv")
 
 te_pred.columns = ["ncode", "t_proba_0", "t_proba_1", "t_proba_2", "t_proba_3", "t_proba_4"]
 val_pred.columns = te_pred.columns
@@ -224,9 +225,9 @@ feat_cols = cat_cols + num_cols
 
 concat_df = pd.merge(concat_df, bert_df)
 
-te_pred = pd.read_csv(Config.i18_inf+"/submission.csv")
-val_pred = pd.read_csv(Config.i18_inf+"/val_pred.csv")
-val2_pred = pd.read_csv(Config.i18_inf+"/kfold_from_2020_to_2021_06_val_pred.csv")
+te_pred = pd.read_csv(Config.i18_inf + "/submission.csv")
+val_pred = pd.read_csv(Config.i18_inf + "/val_pred.csv")
+val2_pred = pd.read_csv(Config.i18_inf + "/kfold_from_2020_to_2021_06_val_pred.csv")
 
 te_pred.columns = ["ncode", "k_proba_0", "k_proba_1", "k_proba_2", "k_proba_3", "k_proba_4"]
 val_pred.columns = te_pred.columns
@@ -240,9 +241,9 @@ feat_cols = cat_cols + num_cols
 
 concat_df = pd.merge(concat_df, bert_df)
 
-te_pred = pd.read_csv(Config.i41_inf+"/submission.csv")
-val_pred = pd.read_csv(Config.i41_inf+"/val_pred.csv")
-val2_pred = pd.read_csv(Config.i41_inf+"/kfold_2021_06_val_pred.csv")
+te_pred = pd.read_csv(Config.i41_inf + "/submission.csv")
+val_pred = pd.read_csv(Config.i41_inf + "/val_pred.csv")
+val2_pred = pd.read_csv(Config.i41_inf + "/kfold_2021_06_val_pred.csv")
 te_pred.columns = ["ncode", "n48_t_proba_0", "n48_t_proba_1", "n48_t_proba_2", "n48_t_proba_3", "n48_t_proba_4"]
 val_pred.columns = te_pred.columns
 val2_pred.columns = te_pred.columns
@@ -255,9 +256,9 @@ feat_cols = cat_cols + num_cols
 
 concat_df = pd.merge(concat_df, bert_df)
 
-te_pred = pd.read_csv(Config.i42_inf+"/submission.csv")
-val_pred = pd.read_csv(Config.i42_inf+"/val_pred.csv")
-val2_pred = pd.read_csv(Config.i42_inf+"/kfold_2021_06_val_pred.csv")
+te_pred = pd.read_csv(Config.i42_inf + "/submission.csv")
+val_pred = pd.read_csv(Config.i42_inf + "/val_pred.csv")
+val2_pred = pd.read_csv(Config.i42_inf + "/kfold_2021_06_val_pred.csv")
 te_pred.columns = ["ncode", "n48_s_proba_0", "n48_s_proba_1", "n48_s_proba_2", "n48_s_proba_3", "n48_s_proba_4"]
 val_pred.columns = te_pred.columns
 val2_pred.columns = te_pred.columns
@@ -270,9 +271,9 @@ feat_cols = cat_cols + num_cols
 
 concat_df = pd.merge(concat_df, bert_df)
 
-te_pred = pd.read_csv(Config.i43_inf+"/submission.csv")
-val_pred = pd.read_csv(Config.i43_inf+"/val_pred.csv")
-val2_pred = pd.read_csv(Config.i43_inf+"/kfold_2021_06_val_pred.csv")
+te_pred = pd.read_csv(Config.i43_inf + "/submission.csv")
+val_pred = pd.read_csv(Config.i43_inf + "/val_pred.csv")
+val2_pred = pd.read_csv(Config.i43_inf + "/kfold_2021_06_val_pred.csv")
 te_pred.columns = ["ncode", "n48_k_proba_0", "n48_k_proba_1", "n48_k_proba_2", "n48_k_proba_3", "n48_k_proba_4"]
 val_pred.columns = te_pred.columns
 val2_pred.columns = te_pred.columns
@@ -285,11 +286,9 @@ feat_cols = cat_cols + num_cols
 
 concat_df = pd.merge(concat_df, bert_df)
 
-
 concat_df.keyword[concat_df.keyword.isnull()] = "None"
 concat_df["count_keyword"] = concat_df.apply(count_keyword, axis=1)
 num_cols += ["count_keyword"]
-
 
 concat_df = processing_ncode(concat_df)
 num_cols += ['ncode_num']
@@ -321,10 +320,9 @@ for i in range(len(concat_df)):
     concat_df["biggenre_count"][i] = d[concat_df.biggenre[i]]
 num_cols += ["biggenre_count"]
 
-
 concat_df = concat_df.drop_duplicates().reset_index(drop=True)
-d={0:-1,1:-1,2:0,3:1,4:1}
-concat_df.fav_novel_cnt_bin=concat_df.fav_novel_cnt_bin.map(d)
+d = {0: -1, 1: -1, 2: 0, 3: 1, 4: 1}
+concat_df.fav_novel_cnt_bin = concat_df.fav_novel_cnt_bin.map(d)
 
 feat_cols = cat_cols + num_cols
 
@@ -355,7 +353,7 @@ for i in range(5):
         "use_best_model": True
     }
     if Config.debug:
-        params["num_boost_round"]=1
+        params["num_boost_round"] = 1
 
     model = cb.CatBoostRegressor(**params)
 

@@ -3,7 +3,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 import torch
-from torch.cuda.amp import autocast, GradScaler
+from torch.cuda.amp import autocast
 import matplotlib.pyplot as plt
 
 plt.style.use("seaborn-talk")
@@ -17,6 +17,7 @@ y_ = Fore.YELLOW
 w_ = Fore.WHITE
 bb_ = Back.BLACK
 sr_ = Style.RESET_ALL
+
 
 class AvgCounter:
     def __init__(self):
@@ -95,6 +96,7 @@ class DynamicPadCollate:
         out["label"] = torch.tensor(out["label"], dtype=torch.float)
 
         return out
+
 
 class Trainer:
     def __init__(self, train_dl, val_dl, model, optimizer, scheduler, scaler, criterion, model_num, Config):
