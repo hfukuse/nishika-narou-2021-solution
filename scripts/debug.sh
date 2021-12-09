@@ -1,4 +1,4 @@
-SCRIPT_DIR=./nishika-narou-2021-1st-place-solution/scripts
+SCRIPT_DIR=./nishika-narou-2021-solution/scripts
 
 #pretrain_modelを作成
 python ${SCRIPT_DIR}/train/pretrain.py --debug
@@ -59,7 +59,7 @@ python ${SCRIPT_DIR}/train/n117_nishika_narou_for_train.py
 python ${SCRIPT_DIR}/inference/n117-nishika-narou-change-multirmse_for_inference.py
 
 #copy model
-cp -r ../input/all-model-nishika-narou/* ./nishika-narou-2021-1st-place-solution/models/
+cp -r ../input/all-model-nishika-narou/* ./nishika-narou-2021-solution/models/
 
 #predict using final model
 python ${SCRIPT_DIR}/inference/predict.py

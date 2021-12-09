@@ -1,6 +1,6 @@
 # 変数の設定
 ```
-SCRIPT_DIR=./nishika-narou-2021-1st-place-solution/scripts
+SCRIPT_DIR=./nishika-narou-2021-solution/scripts
 ```
 # 前処理
 ```

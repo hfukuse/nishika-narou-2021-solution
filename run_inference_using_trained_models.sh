@@ -1,9 +1,9 @@
 #Usage:
-#sh ./nishika-narou-2021-1st-place-solution/run_inference_using_trained_models.sh
+#sh ./nishika-narou-2021-solution/run_inference_using_trained_models.sh
 #
-#事前に学習済みmodelを./nishika-narou-2021-1st-place-solution/modelsに設置しておいてください
+#事前に学習済みmodelを./nishika-narou-2021-solution/modelsに設置しておいてください
 #
-SCRIPT_DIR=./nishika-narou-2021-1st-place-solution/scripts
+SCRIPT_DIR=./nishika-narou-2021-solution/scripts
 
 sh ${SCRIPT_DIR}/preprocess.sh
 

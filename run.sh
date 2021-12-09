@@ -1,8 +1,8 @@
 #Usage:
-#sh ./nishika-narou-2021-1st-place-solution/run.sh
+#sh ./nishika-narou-2021-solution/run.sh
 #
 
-SCRIPT_DIR=./nishika-narou-2021-1st-place-solution/scripts
+SCRIPT_DIR=./nishika-narou-2021-solution/scripts
 
 sh ${SCRIPT_DIR}/preprocess.sh
 sh ${SCRIPT_DIR}/train_bert.sh

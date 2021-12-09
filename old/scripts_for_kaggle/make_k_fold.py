@@ -5,7 +5,7 @@ from sklearn.model_selection import StratifiedKFold, train_test_split
 import argparse
 import json
 import sys
-sys.path.append("./nishika-narou-2021-1st-place-solution")
+sys.path.append("./nishika-narou-2021-solution")
 warnings.filterwarnings('ignore')
 
 seed = 42
@@ -13,7 +13,7 @@ seed = 42
 def make_parse():
     parser = argparse.ArgumentParser()
     arg = parser.add_argument
-    arg("--settings", default="./nishika-narou-2021-1st-place-solution/settings_for_kaggle.json", type=str, help="settings path")
+    arg("--settings", default="./nishika-narou-2021-solution/settings_for_kaggle.json", type=str, help="settings path")
     return parser
 
 

@@ -1,4 +1,4 @@
-SCRIPT_DIR=./nishika-narou-2021-1st-place-solution/scripts
+SCRIPT_DIR=./nishika-narou-2021-solution/scripts
 
 #n86_inferenceを作成
 python ${SCRIPT_DIR}/inference/n86-nishika-narou-use_rmse_for_inference.py

@@ -1,4 +1,4 @@
-SCRIPT_DIR=./nishika-narou-2021-1st-place-solution/scripts
+SCRIPT_DIR=./nishika-narou-2021-solution/scripts
 
 #i8_inferenceを作成
 python ${SCRIPT_DIR}/inference/i8_nishika_narou_for_inference_title.py
