@@ -355,7 +355,8 @@ for i in range(5):
         "use_best_model": True,
         "custom_metric": ['Logloss', 'AUC:hints=skip_train~false']
     }
-    if Config.debug:
+
+    if args.debug:
         params["num_boost_round"] = 1
 
     model = cb.CatBoostClassifier(**params)

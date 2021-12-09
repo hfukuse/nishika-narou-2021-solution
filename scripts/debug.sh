@@ -54,9 +54,13 @@ python ${SCRIPT_DIR}/inference/n107-nishika-narou-use_rmse_for_inference.py
 
 #create model1
 #n117_modelを作成
-python ${SCRIPT_DIR}/train/n117_nishika_narou_for_train.py
+python ${SCRIPT_DIR}/train/n117_nishika_narou_for_train.py --debug
 #n117_inferenceを作成
 python ${SCRIPT_DIR}/inference/n117-nishika-narou-change-multirmse_for_inference.py
+
+#create model2
+#n126_modelを作成
+python ${SCRIPT_DIR}/train/train.py --debug
 
 #copy model
 cp -r ../input/all-model-nishika-narou/* ./nishika-narou-2021-solution/models/

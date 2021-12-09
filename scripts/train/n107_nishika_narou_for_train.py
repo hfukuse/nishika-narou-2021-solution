@@ -352,7 +352,8 @@ for i in range(5):
         "task_type": "CPU",
         "use_best_model": True
     }
-    if Config.debug:
+
+    if args.debug:
         params["num_boost_round"] = 1
 
     model = cb.CatBoostRegressor(**params)

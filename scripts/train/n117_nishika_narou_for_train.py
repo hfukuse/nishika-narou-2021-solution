@@ -373,6 +373,9 @@ for i in range(5):
         'bagging_temperature': 0
     }
 
+    if args.debug:
+        params["num_boost_round"] = 1
+
     model = cb.CatBoostRegressor(**params)
 
     train_data = cb.Pool(train_x, train_y, cat_features=cat_cols)  # ,text_features=text_cols)

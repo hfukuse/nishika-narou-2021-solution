@@ -352,6 +352,10 @@ for i in range(5):
         "use_best_model": True
 
     }
+
+    if args.debug:
+        params["num_boost_round"] = 1
+
     model = cb.CatBoostRegressor(**params)
 
     train_data = cb.Pool(train_x, train_y, cat_features=cat_cols)
