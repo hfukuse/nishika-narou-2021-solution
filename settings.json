@@ -25,5 +25,6 @@
  "n95_01" : { "output_dir" : "./nishika-narou-2021-solution/data/output/n95_01_inference","model_dir" : "n95_rmse01_model"},
  "n102" : { "output_dir" : "./nishika-narou-2021-solution/data/output/n102_inference","model_dir" : "n102_model"},
  "n107" : { "output_dir" : "./nishika-narou-2021-solution/data/output/n107_inference","model_dir" : "n107_model"},
- "n117" : { "output_dir" : "./nishika-narou-2021-solution/data/output/n117_inference","model_dir" : "n117_model"}
+ "n117" : { "output_dir" : "./nishika-narou-2021-solution/data/output/n117_inference","model_dir" : "n117_model"},
+ "n126" : {"model_dir" : "n126_model"}
 }
