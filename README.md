@@ -4,6 +4,7 @@ https://www.nishika.com/competitions/21/summary
 本ソースコードとモデルは上記のNishikaによって開催されたコンペティションで提供されたデータセットを元に作成されました。  
 提供されたデータには2007年から2021年8月までの間に完結した作品が訓練データとして含まれていました。  
 精度を測定するために2021年8月以降に完結した作品についてブックマークが5段階にbin化されたものに対して予測を行いました。指標はloglossで最終スコアは0.627155でした。  
+validation用のデータに対するブックマーク度の正答率は72.23%でした。  
 
 # Approach  
 ![スクリーンショット 2021-12-08 13 39 57](https://user-images.githubusercontent.com/61064493/145149949-e105ff33-a635-4ea4-b198-aee2ac775e67.png)　　
@@ -55,6 +56,7 @@ NVIDIA TESLA P100 GPU × 1 (13 GB of RAM)
 (kaggle notebook環境で動作確認済みです。localで行う場合はkaggle notebook環境に準じた環境で動かしてください。)  
 seed:42  
 新たにmodelの訓練を行って作成する場合、元々modelsフォルダーに存在するmodelを上書きするので注意してください。  
+![スクリーンショット 2021-12-10 13 08 18](https://user-images.githubusercontent.com/61064493/145515758-f0b63af7-b587-446e-a7de-0661b6fc59bf.png)
   
 # 参考  
 1)CLRP-Pretrain  
