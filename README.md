@@ -56,8 +56,10 @@ NVIDIA TESLA P100 GPU × 1 (13 GB of RAM)
 (kaggle notebook環境で動作確認済みです。localで行う場合はkaggle notebook環境に準じた環境で動かしてください。)  
 seed:42  
 新たにmodelの訓練を行って作成する場合、元々modelsフォルダーに存在するmodelを上書きするので注意してください。  
-![スクリーンショット 2021-12-10 13 08 18](https://user-images.githubusercontent.com/61064493/145515758-f0b63af7-b587-446e-a7de-0661b6fc59bf.png)
-  
+# 簡単なEDA  
+![スクリーンショット 2021-12-10 13 08 18](https://user-images.githubusercontent.com/61064493/145515758-f0b63af7-b587-446e-a7de-0661b6fc59bf.png)  
+validation用データに対する予想で正答率は72.23%  
+(正式には公開されていませんが、ブックマーク度0がブックマーク０、ブックマーク度1がブックマーク1~9、ブックマーク度2がブックマーク1０~99、ブックマーク度3がブックマーク100~999、ブックマーク度3がブックマーク1000~に当たると考えられます。)  
 # 参考  
 1)CLRP-Pretrain  
 https://www.kaggle.com/chamecall/clrp-pretrain  
