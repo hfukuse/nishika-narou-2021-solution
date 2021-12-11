@@ -371,7 +371,7 @@ for i in range(5):
     test_pred = model.predict(test_x)
     all_preds.append(test_pred)
     all_val_preds += list(val_pred)
-    model.save_model(Config.model_dir + f'best_model_{i}')
+    model.save_model(Config.model_dir + f'/best_model_{i}')
 
 len(all_val_preds)
 

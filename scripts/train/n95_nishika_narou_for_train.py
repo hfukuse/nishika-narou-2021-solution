@@ -357,6 +357,9 @@ for i in range(5):
     if args.debug:
         params["num_boost_round"] = 1
 
+    train_data = cb.Pool(train_x, train_y, cat_features=cat_cols)
+    val_data = cb.Pool(val_x, val_y, cat_features=cat_cols)
+
     model = cb.CatBoostClassifier(**params)
 
     model = model.fit(
@@ -365,9 +368,6 @@ for i in range(5):
         early_stopping_rounds=150,
         verbose=100
     )
-
-    train_data = cb.Pool(train_x, train_y, cat_features=cat_cols)
-    val_data = cb.Pool(val_x, val_y, cat_features=cat_cols)
 
     val_pred = model.predict(val_x)
     accuracy = sum(val_y == np.round(val_pred)) / len(val_y)
