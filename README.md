@@ -86,6 +86,11 @@ https://github.com/kentaroy47/Kaggle-PANDA-1st-place-solution
 5)Nishika 財務・非財務情報を活用した株主価値予測 2位ソースコード  
 https://github.com/upura/nishika-yuho  
 
+## 外部サイト  
+1)なろうRaWi  
+https://rawi-novel.work/  
+今回のコンペティションより以前から「小説家になろう」について機械学習を適用する試みもなされているようです。  
+　　
 # 作成中
 TODO:  
 1,タイトル、あらすじなどをテキストで入力すれば誰でも学習済みモデルで予測ができるノートブックの作成  
