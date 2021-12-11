@@ -1,11 +1,3 @@
-# 作成中
-TODO:  
-1,タイトル、あらすじなどをテキストで入力すれば誰でも学習済みモデルで予測ができるノートブックの作成  
-2,解法の詳しい解説  
-3,feature importance  
-4,詳しいEDA  
-5,軽量化したモデル  
-
 # Nishika 小説家になろうブクマ数予測 ”伸びる”タイトルとは？ 1位ソースコード
 https://www.nishika.com/competitions/21/summary  
 本ソースコードとモデルは上記のNishikaによって開催されたコンペティションで提供されたデータセットを元に作成されました。  
@@ -93,3 +85,11 @@ https://syosetu.com/
 https://github.com/kentaroy47/Kaggle-PANDA-1st-place-solution  
 5)Nishika 財務・非財務情報を活用した株主価値予測 2位ソースコード  
 https://github.com/upura/nishika-yuho  
+
+# 作成中
+TODO:  
+1,タイトル、あらすじなどをテキストで入力すれば誰でも学習済みモデルで予測ができるノートブックの作成  
+2,解法の詳しい解説  
+3,feature importance  
+4,詳しいEDA  
+5,軽量化したモデル  
