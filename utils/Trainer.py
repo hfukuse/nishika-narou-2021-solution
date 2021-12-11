@@ -6,6 +6,7 @@ import torch
 from torch.cuda.amp import autocast
 import matplotlib.pyplot as plt
 
+
 plt.style.use("seaborn-talk")
 from time import time
 from colorama import Fore, Back, Style
