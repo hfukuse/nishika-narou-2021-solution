@@ -9,3 +9,4 @@
 ./data/input
 ./data/output
 ./data/processed
+./notebooks
