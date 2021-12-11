@@ -51,6 +51,7 @@ from preprocess import remove_url, processing_ncode, count_keyword, count_nn_sto
 
 os.system('pip install transformers fugashi ipadic unidic_lite --quiet')
 os.system('mkdir -p ' + Config.output_dir)
+os.system('mkdir -p ' + Config.model_dir)
 
 train_df = pd.read_csv(Config.train_dir + '/kfold_2021_06.csv')
 train2_df = pd.read_csv(Config.train_dir + '/kfold_from_2020_to_2021_06.csv')
