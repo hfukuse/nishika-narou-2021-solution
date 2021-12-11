@@ -63,11 +63,12 @@ class Config:
     narou_dir = js["narou_dir"]
 
 
-sys.path.append(Config.narou_dir)
+sys.path.append(Config.narou_dir + "/utils")
 
-from utils.preprocess import remove_url
-from utils.model import NarouModel
-from utils.dataset import NishikaNarouDataset
+from preprocess import remove_url
+from model import NarouModel
+from dataset import NishikaNarouDataset
+
 
 os.system('pip install transformers fugashi ipadic unidic_lite --quiet')
 os.system('mkdir -p ' + Config.output_dir)

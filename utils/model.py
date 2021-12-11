@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
 
-
 class AttentionHead(nn.Module):
     def __init__(self, h_size, hidden_dim=512):
         super().__init__()

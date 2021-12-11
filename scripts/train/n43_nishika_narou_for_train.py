@@ -59,7 +59,7 @@ class Config:
     item_num = js["i43"]["item_num"]  # 0ならstory(あらすじ),1ならtitle(題名),2ならkeyword(タグ)
     output_dir = js["i43"]["output_dir"]
     max_len = js["i43"]["max_len"]
-    model_dir = js["models_dir"] + "/" + js["i8"]["model_dir"]
+    model_dir = js["models_dir"] + "/" + js["i43"]["model_dir"]
     narou_dir = js["narou_dir"]
     epochs = js["epochs"]
     max_len = 256
