@@ -81,6 +81,7 @@ https://www.kaggle.com/chamecall/clrp-pretrain
 https://www.kaggle.com/chamecall/clrp-finetune-roberta-large  
 3)小説家になろう  
 https://syosetu.com/  
+↓下記二つはgithubの作り方を参考にさせていただきました  
 4)Kaggle-PANDA-1st-place-solution  
 https://github.com/kentaroy47/Kaggle-PANDA-1st-place-solution  
 5)Nishika 財務・非財務情報を活用した株主価値予測 2位ソースコード  
